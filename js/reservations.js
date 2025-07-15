@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-function handleReservationSubmit(event) {
+async function handleReservationSubmit(event) {
     event.preventDefault();
     
     // Get form data
@@ -29,7 +29,7 @@ function handleReservationSubmit(event) {
         notes: formData.get('notes')
     };
     
-    // Log to console as requested
+    // Log to console (local logging)
     console.log('New Reservation Submitted:', reservation);
     console.log('Name:', reservation.name);
     console.log('Phone:', reservation.phone);
@@ -38,6 +38,32 @@ function handleReservationSubmit(event) {
     console.log('Time:', reservation.time);
     console.log('Number of Guests:', reservation.guests);
     console.log('Special Notes:', reservation.notes || 'None');
+    
+    // Send to Vercel serverless function
+    try {
+        console.log('Sending reservation data to Vercel...');
+        
+        const response = await fetch('/api/reservations/submit', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(reservation)
+        });
+        
+        const result = await response.json();
+        
+        if (response.ok) {
+            console.log('Vercel response:', result);
+            console.log('✅ Reservation successfully logged to Vercel!');
+        } else {
+            console.error('❌ Vercel logging failed:', result);
+        }
+        
+    } catch (error) {
+        console.error('❌ Error sending to Vercel:', error);
+        // Continue with local flow even if Vercel fails
+    }
     
     // Show success message
     showSuccessMessage(reservation);

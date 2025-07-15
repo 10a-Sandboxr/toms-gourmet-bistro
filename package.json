@@ -1,0 +1,14 @@
+{
+  "name": "toms-gourmet-bistro",
+  "version": "1.0.0",
+  "description": "Website for Tom's Gourmet Bistro with online reservations",
+  "main": "index.html",
+  "scripts": {
+    "dev": "vercel dev",
+    "build": "echo 'Static site - no build needed'",
+    "start": "vercel dev"
+  },
+  "keywords": ["restaurant", "bistro", "reservations", "vercel"],
+  "author": "Tom's Gourmet Bistro",
+  "license": "MIT"
+}
