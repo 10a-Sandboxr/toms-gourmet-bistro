@@ -1,4 +1,6 @@
 {
+  "buildCommand": "",
+  "outputDirectory": ".",
   "functions": {
     "api/reservations/submit.js": {
       "maxDuration": 10
