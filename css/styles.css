@@ -190,58 +190,69 @@ nav {
 }
 
 .menu-category {
-  margin-bottom: 3rem;
+  margin-bottom: 4rem;
 }
 
 .menu-category h2 {
-  font-size: 2rem;
+  font-size: 2.5rem;
   color: var(--primary-color);
-  margin-bottom: 2rem;
-  border-bottom: 2px solid var(--secondary-color);
-  padding-bottom: 0.5rem;
+  margin-bottom: 1rem;
+  text-align: center;
   font-family: 'Playfair Display', serif;
+}
+
+.menu-category-subtitle {
+  text-align: center;
+  color: var(--text-light);
+  font-style: italic;
+  font-size: 1.1rem;
+  margin-bottom: 3rem;
 }
 
 .menu-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: 1fr;
   gap: 2rem;
+  max-width: 800px;
+  margin: 0 auto;
 }
 
 .menu-item {
   background: #fff;
-  padding: 1.5rem;
-  border-radius: 8px;
-  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 3px 15px rgba(0,0,0,0.1);
   transition: all 0.3s;
+  border-left: 4px solid var(--secondary-color);
 }
 
 .menu-item:hover {
-  box-shadow: 0 5px 20px rgba(0,0,0,0.15);
-}
-
-.menu-item-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: start;
-  margin-bottom: 0.5rem;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+  transform: translateY(-2px);
 }
 
 .menu-item h3 {
-  font-size: 1.3rem;
+  font-size: 1.5rem;
   color: var(--primary-color);
-}
-
-.menu-item-price {
-  font-size: 1.2rem;
-  color: var(--secondary-color);
-  font-weight: bold;
+  margin-bottom: 0.8rem;
+  font-family: 'Playfair Display', serif;
 }
 
 .menu-item-description {
   color: var(--text-light);
-  font-style: italic;
-  line-height: 1.6;
+  line-height: 1.8;
+  font-size: 1.1rem;
+}
+
+.seasonal-badge {
+  display: inline-block;
+  background: #e8f5e8;
+  color: #2d5a2d;
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  margin-left: 1rem;
 }
 
 /* Reservations Page */
@@ -249,13 +260,191 @@ nav {
   padding: 6rem 0 4rem;
 }
 
-.reservation-form {
-  max-width: 600px;
+.reservation-container {
+  max-width: 1000px;
   margin: 0 auto;
+}
+
+.reservation-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  align-items: start;
+}
+
+.calendar-container {
   background: #fff;
   padding: 2rem;
   border-radius: 10px;
   box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.calendar-nav {
+  background: var(--primary-color);
+  color: #fff;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s;
+}
+
+.calendar-nav:hover {
+  background: #1a252f;
+}
+
+.calendar-month {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--primary-color);
+  font-family: 'Playfair Display', serif;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 1px;
+  background: #ddd;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.calendar-day-header {
+  background: var(--primary-color);
+  color: #fff;
+  padding: 1rem;
+  text-align: center;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+.calendar-day {
+  background: #fff;
+  padding: 1rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s;
+  min-height: 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.calendar-day:hover {
+  background: #f8f9fa;
+}
+
+.calendar-day.other-month {
+  background: #f5f5f5;
+  color: #ccc;
+  cursor: not-allowed;
+}
+
+.calendar-day.today {
+  background: var(--secondary-color);
+  color: #fff;
+  font-weight: bold;
+}
+
+.calendar-day.available {
+  background: #e8f5e8;
+  color: #2d5a2d;
+}
+
+.calendar-day.available:hover {
+  background: #d4edda;
+}
+
+.calendar-day.selected {
+  background: var(--primary-color);
+  color: #fff;
+  font-weight: bold;
+}
+
+.availability-indicator {
+  font-size: 0.7rem;
+  margin-top: 0.2rem;
+  font-weight: bold;
+}
+
+.reservation-form {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.form-disabled {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.selected-date-info {
+  background: var(--accent-color);
+  padding: 1rem;
+  border-radius: 5px;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.selected-date-info h3 {
+  color: var(--primary-color);
+  margin-bottom: 0.5rem;
+}
+
+.time-slots {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.time-slot {
+  padding: 0.8rem;
+  background: #f8f9fa;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.time-slot:hover {
+  background: #e9ecef;
+}
+
+.time-slot.available {
+  background: #e8f5e8;
+  border-color: #28a745;
+  color: #2d5a2d;
+}
+
+.time-slot.available:hover {
+  background: #d4edda;
+}
+
+.time-slot.selected {
+  background: var(--primary-color);
+  color: #fff;
+  border-color: var(--primary-color);
+}
+
+.time-slot.unavailable {
+  background: #f8d7da;
+  border-color: #dc3545;
+  color: #721c24;
+  cursor: not-allowed;
+  opacity: 0.7;
 }
 
 .form-group {
@@ -293,41 +482,6 @@ nav {
   gap: 1rem;
 }
 
-/* Current Reservations */
-.current-reservations {
-  max-width: 1000px;
-  margin: 3rem auto 0;
-}
-
-.reservations-table {
-  width: 100%;
-  background: #fff;
-  border-radius: 10px;
-  overflow: hidden;
-  box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-}
-
-.reservations-table table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.reservations-table th,
-.reservations-table td {
-  padding: 1rem;
-  text-align: left;
-  border-bottom: 1px solid #eee;
-}
-
-.reservations-table th {
-  background-color: var(--primary-color);
-  color: #fff;
-  font-weight: bold;
-}
-
-.reservations-table tr:hover {
-  background-color: #f9f9f9;
-}
 
 /* Contact Page */
 .contact-section {
@@ -408,7 +562,8 @@ footer {
   .about-content,
   .features-grid,
   .menu-grid,
-  .contact-content {
+  .contact-content,
+  .reservation-content {
     grid-template-columns: 1fr;
   }
   
@@ -416,8 +571,13 @@ footer {
     grid-template-columns: 1fr;
   }
   
-  .reservations-table {
-    overflow-x: auto;
+  .time-slots {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .calendar-day {
+    min-height: 50px;
+    padding: 0.5rem;
   }
   
   .section {

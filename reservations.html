@@ -25,96 +25,76 @@
     <section class="reservations-section">
         <div class="container">
             <h1 class="section-title">Make a Reservation</h1>
+            <p style="text-align: center; margin-bottom: 3rem; color: #666; font-size: 1.1rem;">
+                Select a date from the calendar below to see available time slots
+            </p>
             
             <div id="successMessage"></div>
             
-            <form id="reservationForm" class="reservation-form">
-                <div class="form-group">
-                    <label for="name">Full Name *</label>
-                    <input type="text" id="name" name="name" required>
-                </div>
-                
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="phone">Phone Number *</label>
-                        <input type="tel" id="phone" name="phone" placeholder="(555) 123-4567" required>
+            <div class="reservation-container">
+                <div class="reservation-content">
+                    <!-- Calendar Section -->
+                    <div class="calendar-container">
+                        <div class="calendar-header">
+                            <button id="prevMonth" class="calendar-nav">‹</button>
+                            <div id="currentMonth" class="calendar-month">December 2024</div>
+                            <button id="nextMonth" class="calendar-nav">›</button>
+                        </div>
+                        <div id="calendar" class="calendar-grid"></div>
                     </div>
                     
-                    <div class="form-group">
-                        <label for="email">Email Address *</label>
-                        <input type="email" id="email" name="email" required>
+                    <!-- Reservation Form -->
+                    <div class="reservation-form form-disabled">
+                        <div id="selectedDateInfo" class="selected-date-info" style="display: none;"></div>
+                        
+                        <div class="form-group">
+                            <label>Available Times</label>
+                            <div id="timeSlots" class="time-slots"></div>
+                        </div>
+                        
+                        <form id="reservationForm">
+                            <div class="form-group">
+                                <label for="name">Full Name *</label>
+                                <input type="text" id="name" name="name" required>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="phone">Phone Number *</label>
+                                    <input type="tel" id="phone" name="phone" placeholder="(555) 123-4567" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="email">Email Address *</label>
+                                    <input type="email" id="email" name="email" required>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="guests">Number of Guests *</label>
+                                <select id="guests" name="guests" required>
+                                    <option value="">Select number of guests</option>
+                                    <option value="1">1 Guest</option>
+                                    <option value="2">2 Guests</option>
+                                    <option value="3">3 Guests</option>
+                                    <option value="4">4 Guests</option>
+                                    <option value="5">5 Guests</option>
+                                    <option value="6">6 Guests</option>
+                                    <option value="7">7 Guests</option>
+                                    <option value="8">8 Guests</option>
+                                    <option value="9">9 Guests</option>
+                                    <option value="10">10+ Guests</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="notes">Special Requests or Notes</label>
+                                <textarea id="notes" name="notes" rows="3" placeholder="Dietary restrictions, special occasions, seating preferences, etc."></textarea>
+                            </div>
+                            
+                            <button type="submit" id="submitButton" class="btn" disabled>Select Date & Time</button>
+                        </form>
                     </div>
-                </div>
-                
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="date">Reservation Date *</label>
-                        <input type="date" id="date" name="date" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="time">Preferred Time *</label>
-                        <select id="time" name="time" required>
-                            <option value="">Select a time</option>
-                            <option value="5:00 PM">5:00 PM</option>
-                            <option value="5:30 PM">5:30 PM</option>
-                            <option value="6:00 PM">6:00 PM</option>
-                            <option value="6:30 PM">6:30 PM</option>
-                            <option value="7:00 PM">7:00 PM</option>
-                            <option value="7:30 PM">7:30 PM</option>
-                            <option value="8:00 PM">8:00 PM</option>
-                            <option value="8:30 PM">8:30 PM</option>
-                            <option value="9:00 PM">9:00 PM</option>
-                            <option value="9:30 PM">9:30 PM</option>
-                        </select>
-                    </div>
-                </div>
-                
-                <div class="form-group">
-                    <label for="guests">Number of Guests *</label>
-                    <select id="guests" name="guests" required>
-                        <option value="">Select number of guests</option>
-                        <option value="1">1 Guest</option>
-                        <option value="2">2 Guests</option>
-                        <option value="3">3 Guests</option>
-                        <option value="4">4 Guests</option>
-                        <option value="5">5 Guests</option>
-                        <option value="6">6 Guests</option>
-                        <option value="7">7 Guests</option>
-                        <option value="8">8 Guests</option>
-                        <option value="9">9 Guests</option>
-                        <option value="10">10+ Guests</option>
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label for="notes">Special Requests or Notes</label>
-                    <textarea id="notes" name="notes" rows="4" placeholder="Dietary restrictions, special occasions, seating preferences, etc."></textarea>
-                </div>
-                
-                <button type="submit" class="btn">Confirm Reservation</button>
-            </form>
-            
-            <!-- Current Reservations -->
-            <div class="current-reservations">
-                <h2 class="section-title" style="font-size: 2rem;">Current Reservations</h2>
-                <div class="reservations-table">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Phone</th>
-                                <th>Email</th>
-                                <th>Date</th>
-                                <th>Time</th>
-                                <th>Guests</th>
-                                <th>Notes</th>
-                            </tr>
-                        </thead>
-                        <tbody id="reservationsTableBody">
-                            <!-- Demo reservations will be loaded here -->
-                        </tbody>
-                    </table>
                 </div>
             </div>
         </div>
