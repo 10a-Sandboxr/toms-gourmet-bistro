@@ -351,6 +351,10 @@ nav {
   font-style: italic;
 }
 
+#api-for-ai-agents {
+  color: white;
+}
+
 /* Footer */
 footer {
   background-color: var(--primary-color);
