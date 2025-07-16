@@ -18,7 +18,71 @@ document.addEventListener('DOMContentLoaded', function() {
     if (guestsSelect) {
         guestsSelect.addEventListener('change', handleGuestCountChange);
     }
+    
+    // Add blur event listeners to all form fields for immediate logging
+    addFieldLoggingListeners();
 });
+
+function addFieldLoggingListeners() {
+    // Regular form fields
+    const fieldsToLog = [
+        { id: 'name', label: 'Name' },
+        { id: 'phone', label: 'Phone' },
+        { id: 'email', label: 'Email' },
+        { id: 'date', label: 'Date' },
+        { id: 'time', label: 'Time' },
+        { id: 'guests', label: 'Guests' },
+        { id: 'notes', label: 'Notes' }
+    ];
+    
+    fieldsToLog.forEach(field => {
+        const element = document.getElementById(field.id);
+        if (element) {
+            element.addEventListener('blur', function() {
+                logFieldValue(field.label, this.value);
+            });
+            // Also log on change for select elements
+            if (element.tagName === 'SELECT') {
+                element.addEventListener('change', function() {
+                    logFieldValue(field.label, this.value);
+                });
+            }
+        }
+    });
+    
+    // Credit card fields with special handling
+    const creditCardFields = [
+        { id: 'cardNumber', label: 'Card Number', mask: true },
+        { id: 'cardExpiry', label: 'Card Expiry', mask: false },
+        { id: 'cardCVV', label: 'CVV', mask: true },
+        { id: 'cardName', label: 'Cardholder Name', mask: false }
+    ];
+    
+    creditCardFields.forEach(field => {
+        const element = document.getElementById(field.id);
+        if (element) {
+            element.addEventListener('blur', function() {
+                if (this.value) {
+                    let displayValue = this.value;
+                    if (field.mask && field.id === 'cardNumber') {
+                        displayValue = '**** **** **** ' + this.value.replace(/\s/g, '').slice(-4);
+                    } else if (field.mask && field.id === 'cardCVV') {
+                        displayValue = '***';
+                    }
+                    logFieldValue(field.label, displayValue);
+                }
+            });
+        }
+    });
+}
+
+function logFieldValue(fieldName, value) {
+    if (value && value.trim() !== '') {
+        console.log(`[FIELD UPDATE] ${fieldName}: ${value}`);
+        console.log(`Timestamp: ${new Date().toLocaleString()}`);
+        console.log('---');
+    }
+}
 
 function handleGuestCountChange(event) {
     const guestCount = event.target.value;
