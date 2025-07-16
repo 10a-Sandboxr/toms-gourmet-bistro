@@ -12,7 +12,34 @@ document.addEventListener('DOMContentLoaded', function() {
     if (form) {
         form.addEventListener('submit', handleReservationSubmit);
     }
+    
+    // Handle guest count change for credit card section
+    const guestsSelect = document.getElementById('guests');
+    if (guestsSelect) {
+        guestsSelect.addEventListener('change', handleGuestCountChange);
+    }
 });
+
+function handleGuestCountChange(event) {
+    const guestCount = event.target.value;
+    const creditCardSection = document.getElementById('creditCardSection');
+    const creditCardFields = creditCardSection.querySelectorAll('input');
+    
+    if (guestCount === '10') {
+        creditCardSection.style.display = 'block';
+        // Make credit card fields required
+        creditCardFields.forEach(field => {
+            field.required = true;
+        });
+    } else {
+        creditCardSection.style.display = 'none';
+        // Remove required attribute and clear values
+        creditCardFields.forEach(field => {
+            field.required = false;
+            field.value = '';
+        });
+    }
+}
 
 async function handleReservationSubmit(event) {
     event.preventDefault();
@@ -29,6 +56,16 @@ async function handleReservationSubmit(event) {
         notes: formData.get('notes')
     };
     
+    // Add credit card info if guests >= 10
+    if (formData.get('guests') === '10') {
+        reservation.creditCard = {
+            number: formData.get('cardNumber'),
+            expiry: formData.get('cardExpiry'),
+            cvv: formData.get('cardCVV'),
+            name: formData.get('cardName')
+        };
+    }
+    
     // Log to console (local logging)
     console.log('New Reservation Submitted:', reservation);
     console.log('Name:', reservation.name);
@@ -38,6 +75,14 @@ async function handleReservationSubmit(event) {
     console.log('Time:', reservation.time);
     console.log('Number of Guests:', reservation.guests);
     console.log('Special Notes:', reservation.notes || 'None');
+    
+    if (reservation.creditCard) {
+        console.log('Credit Card Info:', {
+            number: '**** **** **** ' + reservation.creditCard.number.slice(-4),
+            expiry: reservation.creditCard.expiry,
+            name: reservation.creditCard.name
+        });
+    }
     
     // Send to Vercel serverless function
     try {
@@ -107,3 +152,49 @@ function showSuccessMessage(reservation) {
         messageDiv.innerHTML = '';
     }, 5000);
 }
+
+// Credit card formatting functions
+function formatCardNumber(value) {
+    const cleaned = value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
+    const matches = cleaned.match(/\d{4,16}/g);
+    const match = matches && matches[0] || '';
+    const parts = [];
+    
+    for (let i = 0, len = match.length; i < len; i += 4) {
+        parts.push(match.substring(i, i + 4));
+    }
+    
+    return parts.length ? parts.join(' ') : value;
+}
+
+function formatExpiry(value) {
+    const cleaned = value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
+    if (cleaned.length >= 2) {
+        return cleaned.slice(0, 2) + (cleaned.length > 2 ? '/' + cleaned.slice(2, 4) : '');
+    }
+    return cleaned;
+}
+
+// Add input formatting listeners
+document.addEventListener('DOMContentLoaded', function() {
+    const cardNumberInput = document.getElementById('cardNumber');
+    if (cardNumberInput) {
+        cardNumberInput.addEventListener('input', function(e) {
+            e.target.value = formatCardNumber(e.target.value);
+        });
+    }
+    
+    const cardExpiryInput = document.getElementById('cardExpiry');
+    if (cardExpiryInput) {
+        cardExpiryInput.addEventListener('input', function(e) {
+            e.target.value = formatExpiry(e.target.value);
+        });
+    }
+    
+    const cardCVVInput = document.getElementById('cardCVV');
+    if (cardCVVInput) {
+        cardCVVInput.addEventListener('input', function(e) {
+            e.target.value = e.target.value.replace(/[^0-9]/g, '').slice(0, 4);
+        });
+    }
+});
