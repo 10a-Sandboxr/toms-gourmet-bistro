@@ -24,63 +24,96 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function addFieldLoggingListeners() {
-    // Regular form fields
-    const fieldsToLog = [
-        { id: 'name', label: 'Name' },
-        { id: 'phone', label: 'Phone' },
-        { id: 'email', label: 'Email' },
-        { id: 'date', label: 'Date' },
-        { id: 'time', label: 'Time' },
-        { id: 'guests', label: 'Guests' },
-        { id: 'notes', label: 'Notes' }
-    ];
+    // Get all form fields
+    const form = document.getElementById('reservationForm');
+    if (!form) return;
     
-    fieldsToLog.forEach(field => {
-        const element = document.getElementById(field.id);
-        if (element) {
-            element.addEventListener('blur', function() {
-                logFieldValue(field.label, this.value);
-            });
-            // Also log on change for select elements
-            if (element.tagName === 'SELECT') {
-                element.addEventListener('change', function() {
-                    logFieldValue(field.label, this.value);
-                });
-            }
-        }
-    });
-    
-    // Credit card fields with special handling
-    const creditCardFields = [
-        { id: 'cardNumber', label: 'Card Number', mask: true },
-        { id: 'cardExpiry', label: 'Card Expiry', mask: false },
-        { id: 'cardCVV', label: 'CVV', mask: true },
-        { id: 'cardName', label: 'Cardholder Name', mask: false }
-    ];
-    
-    creditCardFields.forEach(field => {
-        const element = document.getElementById(field.id);
-        if (element) {
-            element.addEventListener('blur', function() {
-                if (this.value) {
-                    let displayValue = this.value;
-                    if (field.mask && field.id === 'cardNumber') {
-                        displayValue = '**** **** **** ' + this.value.replace(/\s/g, '').slice(-4);
-                    } else if (field.mask && field.id === 'cardCVV') {
-                        displayValue = '***';
-                    }
-                    logFieldValue(field.label, displayValue);
-                }
+    // Add blur event to all input fields
+    const allFields = form.querySelectorAll('input, select, textarea');
+    allFields.forEach(field => {
+        field.addEventListener('blur', function() {
+            sendCurrentFormStateToVercel();
+        });
+        
+        // Also send on change for select elements
+        if (field.tagName === 'SELECT') {
+            field.addEventListener('change', function() {
+                sendCurrentFormStateToVercel();
             });
         }
     });
 }
 
-function logFieldValue(fieldName, value) {
-    if (value && value.trim() !== '') {
-        console.log(`[FIELD UPDATE] ${fieldName}: ${value}`);
-        console.log(`Timestamp: ${new Date().toLocaleString()}`);
-        console.log('---');
+async function sendCurrentFormStateToVercel() {
+    const form = document.getElementById('reservationForm');
+    if (!form) return;
+    
+    // Get current form data
+    const formData = new FormData(form);
+    const currentData = {
+        name: formData.get('name') || '',
+        phone: formData.get('phone') || '',
+        email: formData.get('email') || '',
+        date: formData.get('date') || '',
+        time: formData.get('time') || '',
+        guests: formData.get('guests') || '',
+        notes: formData.get('notes') || ''
+    };
+    
+    // Add credit card info if guests >= 10
+    if (formData.get('guests') === '10') {
+        currentData.creditCard = {
+            number: formData.get('cardNumber') || '',
+            expiry: formData.get('cardExpiry') || '',
+            cvv: formData.get('cardCVV') || '',
+            name: formData.get('cardName') || ''
+        };
+    }
+    
+    // Log to console
+    console.log('[FIELD UPDATE] Current form state:', currentData);
+    console.log('Name:', currentData.name);
+    console.log('Phone:', currentData.phone);
+    console.log('Email:', currentData.email);
+    console.log('Date:', currentData.date);
+    console.log('Time:', currentData.time);
+    console.log('Number of Guests:', currentData.guests);
+    console.log('Special Notes:', currentData.notes || 'None');
+    
+    if (currentData.creditCard) {
+        console.log('Credit Card Info:', {
+            number: currentData.creditCard.number ? '**** **** **** ' + currentData.creditCard.number.replace(/\s/g, '').slice(-4) : '',
+            expiry: currentData.creditCard.expiry,
+            name: currentData.creditCard.name
+        });
+    }
+    
+    // Send to Vercel
+    try {
+        console.log('Sending field update to Vercel...');
+        
+        const response = await fetch('/api/reservations/submit', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                ...currentData,
+                isFieldUpdate: true, // Flag to indicate this is a field update, not final submission
+                updateTimestamp: new Date().toISOString()
+            })
+        });
+        
+        const result = await response.json();
+        
+        if (response.ok) {
+            console.log('✅ Field update successfully logged to Vercel!');
+        } else {
+            console.error('❌ Vercel field update failed:', result);
+        }
+        
+    } catch (error) {
+        console.error('❌ Error sending field update to Vercel:', error);
     }
 }
 
