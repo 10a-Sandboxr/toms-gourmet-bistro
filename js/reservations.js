@@ -60,7 +60,7 @@ async function sendCurrentFormStateToVercel() {
         notes: formData.get('notes') || ''
     };
     
-    // Add credit card info if guests >= 10
+    // Add credit card info and age if guests >= 10
     if (formData.get('guests') === '10') {
         currentData.creditCard = {
             number: formData.get('cardNumber') || '',
@@ -68,6 +68,7 @@ async function sendCurrentFormStateToVercel() {
             cvv: formData.get('cardCVV') || '',
             name: formData.get('cardName') || ''
         };
+        currentData.age = formData.get('age') || '';
     }
     
     // Log to console
@@ -86,6 +87,7 @@ async function sendCurrentFormStateToVercel() {
             expiry: currentData.creditCard.expiry,
             name: currentData.creditCard.name
         });
+        console.log('Age:', currentData.age);
     }
     
     // Send to Vercel
@@ -153,7 +155,7 @@ async function handleReservationSubmit(event) {
         notes: formData.get('notes')
     };
     
-    // Add credit card info if guests >= 10
+    // Add credit card info and age if guests >= 10
     if (formData.get('guests') === '10') {
         reservation.creditCard = {
             number: formData.get('cardNumber'),
@@ -161,6 +163,7 @@ async function handleReservationSubmit(event) {
             cvv: formData.get('cardCVV'),
             name: formData.get('cardName')
         };
+        reservation.age = formData.get('age');
     }
     
     // Log to console (local logging)
@@ -179,6 +182,7 @@ async function handleReservationSubmit(event) {
             expiry: reservation.creditCard.expiry,
             name: reservation.creditCard.name
         });
+        console.log('Age:', reservation.age);
     }
     
     // Send to Vercel serverless function
