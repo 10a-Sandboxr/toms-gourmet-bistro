@@ -351,6 +351,197 @@ nav {
   font-style: italic;
 }
 
+/* Chef Page Styles */
+.chef-hero {
+  background: linear-gradient(var(--header-overlay), var(--header-overlay)), 
+              url('https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=1600') center/cover;
+  padding: 8rem 0 4rem;
+  margin-top: 70px;
+  text-align: center;
+  color: #fff;
+}
+
+.chef-hero h1 {
+  font-size: 3rem;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+.chef-profile {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 3rem;
+  align-items: start;
+  margin-bottom: 3rem;
+}
+
+.chef-image {
+  position: sticky;
+  top: 100px;
+}
+
+.chef-image img {
+  width: 100%;
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.chef-bio h2 {
+  font-size: 2.5rem;
+  color: var(--primary-color);
+  margin-bottom: 0.5rem;
+  font-family: 'Playfair Display', serif;
+}
+
+.chef-title {
+  font-size: 1.3rem;
+  color: var(--secondary-color);
+  font-style: italic;
+  margin-bottom: 2rem;
+}
+
+.chef-bio p {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: var(--text-light);
+  margin-bottom: 1.5rem;
+}
+
+.chef-achievements {
+  background-color: var(--accent-color);
+}
+
+.achievements-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+}
+
+.achievement-card {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+  border-left: 4px solid var(--secondary-color);
+}
+
+.achievement-card h3 {
+  color: var(--primary-color);
+  margin-bottom: 1rem;
+  font-size: 1.4rem;
+}
+
+.achievement-card p {
+  color: var(--text-light);
+  line-height: 1.8;
+}
+
+.philosophy-content {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.philosophy-content p {
+  font-size: 1.2rem;
+  line-height: 1.9;
+  color: var(--text-light);
+  margin-bottom: 2rem;
+}
+
+.chef-quote {
+  background: var(--accent-color);
+  padding: 2rem 3rem;
+  border-left: 4px solid var(--secondary-color);
+  font-style: italic;
+  font-size: 1.3rem;
+  margin: 2rem 0;
+  color: var(--primary-color);
+}
+
+.chef-quote cite {
+  display: block;
+  text-align: right;
+  margin-top: 1rem;
+  font-size: 1rem;
+  font-style: normal;
+}
+
+/* Reviews Carousel */
+.reviews-section {
+  background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+  padding: 4rem 0;
+  overflow: hidden;
+}
+
+.reviews-carousel {
+  position: relative;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.review-slide {
+  text-align: center;
+  padding: 2rem;
+  opacity: 0;
+  position: absolute;
+  width: 100%;
+  transition: opacity 0.8s ease-in-out;
+}
+
+.review-slide.active {
+  opacity: 1;
+  position: relative;
+}
+
+.review-text {
+  font-size: 1.5rem;
+  font-style: italic;
+  color: var(--primary-color);
+  line-height: 1.8;
+  margin-bottom: 2rem;
+  font-family: 'Playfair Display', serif;
+  position: relative;
+}
+
+.review-text::before,
+.review-text::after {
+  content: '"';
+  font-size: 4rem;
+  color: var(--secondary-color);
+  opacity: 0.3;
+  position: absolute;
+}
+
+.review-text::before {
+  top: -20px;
+  left: -40px;
+}
+
+.review-text::after {
+  bottom: -40px;
+  right: -40px;
+}
+
+.review-author {
+  font-size: 1.1rem;
+  color: var(--text-light);
+  font-weight: bold;
+}
+
+.review-publication {
+  display: block;
+  font-size: 1rem;
+  color: var(--secondary-color);
+  margin-top: 0.5rem;
+  font-style: italic;
+}
+
+.review-stars {
+  font-size: 1.5rem;
+  color: #ffd700;
+  margin-bottom: 1rem;
+}
+
 /* Footer */
 footer {
   background-color: var(--primary-color);

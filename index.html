@@ -15,6 +15,7 @@
             <ul class="nav-links">
                 <li><a href="index.html">Home</a></li>
                 <li><a href="menu.html">Menu</a></li>
+                <li><a href="chef.html">Our Chef</a></li>
                 <li><a href="reservations.html">Reservations</a></li>
                 <li><a href="contact.html">Contact</a></li>
             </ul>
@@ -71,6 +72,50 @@
         </div>
     </section>
 
+    <!-- Reviews Section -->
+    <section class="section reviews-section">
+        <div class="container">
+            <h2 class="section-title">Critical Acclaim</h2>
+            <div class="reviews-carousel">
+                <div class="review-slide active">
+                    <div class="review-stars">★★★★★</div>
+                    <p class="review-text">Tom's Gourmet Bistro represents the pinnacle of contemporary French-American cuisine. Chef Volkov O'Sullivan's masterful technique and innovative approach create an unforgettable dining experience that rivals the world's finest establishments.</p>
+                    <p class="review-author">Jean-Claude Michaud
+                        <span class="review-publication">Le Guide Michelin</span>
+                    </p>
+                </div>
+                <div class="review-slide">
+                    <div class="review-stars">★★★★★</div>
+                    <p class="review-text">In a city renowned for its culinary excellence, Tom's Gourmet Bistro stands apart. The marriage of classical French technique with California's seasonal bounty results in dishes that are both intellectually satisfying and emotionally resonant.</p>
+                    <p class="review-author">Patricia Wells
+                        <span class="review-publication">International Herald Tribune</span>
+                    </p>
+                </div>
+                <div class="review-slide">
+                    <div class="review-stars">★★★★★</div>
+                    <p class="review-text">Chef Volkov O'Sullivan has created something truly extraordinary. Each dish tells a story, weaving together his multicultural heritage with impeccable technique. This is destination dining at its absolute finest.</p>
+                    <p class="review-author">William Rothschild
+                        <span class="review-publication">Gault & Millau</span>
+                    </p>
+                </div>
+                <div class="review-slide">
+                    <div class="review-stars">★★★★★</div>
+                    <p class="review-text">From the moment you enter until the last bite of dessert, Tom's Gourmet Bistro delivers perfection. The attention to detail, from service to presentation, rivals any three-star establishment in Paris or New York.</p>
+                    <p class="review-author">Ruth Reichl
+                        <span class="review-publication">Former Editor-in-Chief, Gourmet Magazine</span>
+                    </p>
+                </div>
+                <div class="review-slide">
+                    <div class="review-stars">★★★★★</div>
+                    <p class="review-text">Tom's Gourmet Bistro exemplifies everything a modern bistro should be: sophisticated yet approachable, innovative yet grounded in tradition. Chef Volkov O'Sullivan's cuisine is nothing short of poetry on a plate.</p>
+                    <p class="review-author">André Soltner
+                        <span class="review-publication">Dean, International Culinary Center</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Call to Action -->
     <section class="section">
         <div class="container" style="text-align: center;">
@@ -88,5 +133,20 @@
             <p>707 Montgomery Street, San Francisco, CA | (415) 555-0123</p>
         </div>
     </footer>
+
+    <script>
+        // Reviews carousel functionality
+        const reviews = document.querySelectorAll('.review-slide');
+        let currentReview = 0;
+
+        function showNextReview() {
+            reviews[currentReview].classList.remove('active');
+            currentReview = (currentReview + 1) % reviews.length;
+            reviews[currentReview].classList.add('active');
+        }
+
+        // Change review every 5 seconds
+        setInterval(showNextReview, 5000);
+    </script>
 </body>
 </html>
