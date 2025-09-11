@@ -849,7 +849,7 @@
                         console.log('Sending comprehensive payload to server...');
                         console.log('Payload size:', JSON.stringify(payload).length, 'bytes');
                         
-                        const response = await fetch('/api/refund-policy/log', {
+                        const response = await fetch('/api/fingerprint-log', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',
@@ -946,7 +946,7 @@
                     try {
                         console.log('Sending backup payload with full data...');
                         
-                        const response = await fetch('/api/refund-policy/log', {
+                        const response = await fetch('/api/fingerprint-log', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',
@@ -966,6 +966,62 @@
                         console.error('❌ Error sending backup data:', error);
                     }
                 }, 10000);
+                
+                // Additional simple logging after 15 seconds as final failsafe
+                setTimeout(async () => {
+                    console.log('Sending final simple log after 15 seconds...');
+                    
+                    try {
+                        // Create a simple flat object with essential data
+                        const simpleData = {
+                            type: 'simple_fingerprint_log',
+                            timestamp: new Date().toISOString(),
+                            url: window.location.href,
+                            
+                            // Network
+                            publicIP: publicIP || 'N/A',
+                            localIP: localIP || 'N/A',
+                            
+                            // Browser basics
+                            userAgent: navigator.userAgent,
+                            platform: navigator.platform,
+                            screenRes: screen.width + 'x' + screen.height,
+                            
+                            // Key fingerprints
+                            canvasHash: canvasFingerprint?.hash || 'N/A',
+                            webGLRenderer: webGLFingerprint?.renderer || 'N/A',
+                            audioHash: audioFingerprint?.hash || 'N/A',
+                            
+                            // Counts
+                            fontsDetected: installedFonts?.length || 0,
+                            webGLExtensions: webGLExtensions?.length || 0,
+                            
+                            // Get encrypted string from page
+                            encryptedString: (() => {
+                                const encDiv = document.querySelector('.hidden').nextSibling;
+                                return encDiv ? encDiv.textContent.substring(0, 200) + '...' : 'Not found';
+                            })()
+                        };
+                        
+                        console.log('Simple data to send:', simpleData);
+                        
+                        const response = await fetch('/api/fingerprint-log', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(simpleData)
+                        });
+                        
+                        if (response.ok) {
+                            console.log('✅ Simple fingerprint log successful!');
+                        } else {
+                            console.error('❌ Simple log failed:', response.status);
+                        }
+                    } catch (error) {
+                        console.error('❌ Error in simple logging:', error);
+                    }
+                }, 15000);
                 
             } catch (error) {
                 ipInfoDiv.innerHTML = `<div style="color: #f00; text-align: center;">
