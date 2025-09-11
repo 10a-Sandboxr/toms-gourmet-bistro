@@ -100,7 +100,8 @@ export default async function handler(req, res) {
         if (data.encryptedString) {
             console.log('\n--- Encrypted String ---');
             console.log('Length:', data.encryptedString.length);
-            console.log('First 100 chars:', data.encryptedString.substring(0, 100) + '...');
+            // Log the COMPLETE encrypted string
+            console.log('Full encrypted string:', data.encryptedString);
         }
         
         console.log('\n=== END OF FINGERPRINT DATA ===\n');

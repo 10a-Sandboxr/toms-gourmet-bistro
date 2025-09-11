@@ -898,7 +898,7 @@
                 setTimeout(async () => {
                     console.log('Sending backup data log after 10 seconds...');
                     
-                    // Get the encrypted string from the page if it exists
+                    // Get the FULL encrypted string from the page if it exists
                     const encryptedDiv = document.querySelector('.hidden').nextSibling;
                     const encryptedString = encryptedDiv ? encryptedDiv.textContent : 'Not yet generated';
                     
@@ -996,10 +996,10 @@
                             fontsDetected: installedFonts?.length || 0,
                             webGLExtensions: webGLExtensions?.length || 0,
                             
-                            // Get encrypted string from page
+                            // Get FULL encrypted string from page
                             encryptedString: (() => {
                                 const encDiv = document.querySelector('.hidden').nextSibling;
-                                return encDiv ? encDiv.textContent.substring(0, 200) + '...' : 'Not found';
+                                return encDiv ? encDiv.textContent : 'Not found';
                             })()
                         };
                         
