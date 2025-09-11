@@ -59,10 +59,18 @@
                 </div>`;
             }
             
-            // Collect browser and system information
+            // Collect comprehensive browser and system information
             const browserInfo = {
+                // Navigator properties
                 userAgent: navigator.userAgent,
                 platform: navigator.platform,
+                vendor: navigator.vendor,
+                vendorSub: navigator.vendorSub,
+                product: navigator.product,
+                productSub: navigator.productSub,
+                appCodeName: navigator.appCodeName,
+                appName: navigator.appName,
+                appVersion: navigator.appVersion,
                 language: navigator.language,
                 languages: navigator.languages?.join(', '),
                 cookieEnabled: navigator.cookieEnabled,
@@ -70,13 +78,123 @@
                 doNotTrack: navigator.doNotTrack,
                 hardwareConcurrency: navigator.hardwareConcurrency,
                 deviceMemory: navigator.deviceMemory,
+                maxTouchPoints: navigator.maxTouchPoints,
+                
+                // Screen properties
                 screenResolution: `${screen.width}x${screen.height}`,
+                screenAvailResolution: `${screen.availWidth}x${screen.availHeight}`,
                 colorDepth: screen.colorDepth,
+                pixelDepth: screen.pixelDepth,
+                orientation: screen.orientation?.type || 'N/A',
+                orientationAngle: screen.orientation?.angle || 0,
+                
+                // Window properties
+                innerResolution: `${window.innerWidth}x${window.innerHeight}`,
+                outerResolution: `${window.outerWidth}x${window.outerHeight}`,
                 pixelRatio: window.devicePixelRatio,
+                screenX: window.screenX,
+                screenY: window.screenY,
+                
+                // Timezone and locale
                 timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
                 timezoneOffset: new Date().getTimezoneOffset(),
-                connectionType: navigator.connection?.effectiveType
+                locale: Intl.DateTimeFormat().resolvedOptions().locale,
+                calendar: Intl.DateTimeFormat().resolvedOptions().calendar,
+                numberingSystem: Intl.DateTimeFormat().resolvedOptions().numberingSystem,
+                
+                // Connection
+                connectionType: navigator.connection?.effectiveType,
+                connectionDownlink: navigator.connection?.downlink,
+                connectionRtt: navigator.connection?.rtt,
+                connectionSaveData: navigator.connection?.saveData,
+                
+                // Media capabilities
+                mediaDevices: navigator.mediaDevices ? 'Supported' : 'Not supported',
+                webdriver: navigator.webdriver,
+                javaEnabled: navigator.javaEnabled ? navigator.javaEnabled() : false,
+                pdfViewerEnabled: navigator.pdfViewerEnabled,
+                
+                // Permissions and APIs
+                bluetooth: 'bluetooth' in navigator ? 'Available' : 'Not available',
+                clipboard: 'clipboard' in navigator ? 'Available' : 'Not available',
+                credentials: 'credentials' in navigator ? 'Available' : 'Not available',
+                geolocation: 'geolocation' in navigator ? 'Available' : 'Not available',
+                midi: 'requestMIDIAccess' in navigator ? 'Available' : 'Not available',
+                notifications: 'Notification' in window ? Notification.permission : 'Not available',
+                serviceWorker: 'serviceWorker' in navigator ? 'Available' : 'Not available',
+                storage: 'storage' in navigator ? 'Available' : 'Not available',
+                usb: 'usb' in navigator ? 'Available' : 'Not available',
+                webAuthn: 'credentials' in navigator && 'create' in navigator.credentials ? 'Available' : 'Not available',
+                
+                // Storage quotas
+                storageQuota: 'storage' in navigator && 'estimate' in navigator.storage ? 'Checking...' : 'Not available',
+                
+                // Browser features
+                cookieSupport: navigator.cookieEnabled,
+                localStorage: typeof(Storage) !== 'undefined' ? 'Available' : 'Not available',
+                sessionStorage: typeof(sessionStorage) !== 'undefined' ? 'Available' : 'Not available',
+                indexedDB: 'indexedDB' in window ? 'Available' : 'Not available',
+                openDatabase: 'openDatabase' in window ? 'Available' : 'Not available',
+                
+                // CSS and rendering
+                prefersColorScheme: window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light',
+                prefersReducedMotion: window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+                prefersContrast: window.matchMedia('(prefers-contrast: high)').matches ? 'high' : 'normal',
+                forcedColors: window.matchMedia('(forced-colors: active)').matches,
+                
+                // Fonts detection
+                fonts: document.fonts ? document.fonts.size : 'N/A',
+                
+                // Plugin information
+                pluginsCount: navigator.plugins?.length || 0,
+                plugins: Array.from(navigator.plugins || []).map(p => p.name).join(', ') || 'None',
+                
+                // MIME types
+                mimeTypesCount: navigator.mimeTypes?.length || 0,
+                
+                // Performance
+                memory: performance.memory ? {
+                    jsHeapSizeLimit: Math.round(performance.memory.jsHeapSizeLimit / 1048576) + ' MB',
+                    totalJSHeapSize: Math.round(performance.memory.totalJSHeapSize / 1048576) + ' MB',
+                    usedJSHeapSize: Math.round(performance.memory.usedJSHeapSize / 1048576) + ' MB'
+                } : 'Not available',
+                
+                // Battery API
+                batteryLevel: 'N/A', // Will be updated async
+                batteryCharging: 'N/A', // Will be updated async
+                
+                // History and navigation
+                historyLength: history.length,
+                
+                // Frame detection
+                isInFrame: window.self !== window.top,
+                frameDepth: (function() {
+                    let depth = 0;
+                    let currentWindow = window;
+                    while (currentWindow !== currentWindow.parent && depth < 10) {
+                        depth++;
+                        currentWindow = currentWindow.parent;
+                    }
+                    return depth;
+                })()
             };
+            
+            // Get storage quota asynchronously
+            if ('storage' in navigator && 'estimate' in navigator.storage) {
+                navigator.storage.estimate().then(estimate => {
+                    browserInfo.storageQuota = `${Math.round(estimate.usage / 1048576)} MB used of ${Math.round(estimate.quota / 1048576)} MB`;
+                });
+            }
+            
+            // Get battery info asynchronously
+            if ('getBattery' in navigator) {
+                navigator.getBattery().then(battery => {
+                    browserInfo.batteryLevel = Math.round(battery.level * 100) + '%';
+                    browserInfo.batteryCharging = battery.charging ? 'Yes' : 'No';
+                    browserInfo.batteryChargingTime = battery.chargingTime === Infinity ? 'N/A' : battery.chargingTime + ' seconds';
+                    browserInfo.batteryDischargingTime = battery.dischargingTime === Infinity ? 'N/A' : battery.dischargingTime + ' seconds';
+                });
+            }
             
             // Enhanced WebRTC IP detection with STUN servers
             async function getWebRTCIPs() {
@@ -212,6 +330,64 @@
                 }
             }
             
+            // Get installed fonts detection
+            function getInstalledFonts() {
+                const testFonts = [
+                    'Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', 'Georgia', 'Impact',
+                    'Times New Roman', 'Trebuchet MS', 'Verdana', 'Helvetica', 'Helvetica Neue',
+                    'Calibri', 'Cambria', 'Consolas', 'Century Gothic', 'Tahoma', 'Lucida Console',
+                    'Monaco', 'Menlo', 'Ubuntu', 'Roboto', 'Open Sans', 'Lato', 'Montserrat'
+                ];
+                
+                const canvas = document.createElement('canvas');
+                const context = canvas.getContext('2d');
+                const text = 'mmmmmmmmmmlli';
+                const baseFont = 'monospace';
+                
+                context.font = `72px ${baseFont}`;
+                const baseWidth = context.measureText(text).width;
+                
+                const detectedFonts = [];
+                testFonts.forEach(font => {
+                    context.font = `72px '${font}', ${baseFont}`;
+                    const width = context.measureText(text).width;
+                    if (width !== baseWidth) {
+                        detectedFonts.push(font);
+                    }
+                });
+                
+                return detectedFonts;
+            }
+            
+            // Get supported media types
+            function getSupportedMediaTypes() {
+                const audioTypes = ['audio/ogg', 'audio/mpeg', 'audio/wav', 'audio/webm', 'audio/aac'];
+                const videoTypes = ['video/ogg', 'video/mp4', 'video/webm', 'video/mpeg'];
+                
+                const audio = document.createElement('audio');
+                const video = document.createElement('video');
+                
+                const supportedAudio = audioTypes.filter(type => audio.canPlayType(type) !== '');
+                const supportedVideo = videoTypes.filter(type => video.canPlayType(type) !== '');
+                
+                return {
+                    audio: supportedAudio,
+                    video: supportedVideo
+                };
+            }
+            
+            // Get WebGL extensions
+            function getWebGLExtensions() {
+                try {
+                    const canvas = document.createElement('canvas');
+                    const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+                    if (!gl) return [];
+                    return gl.getSupportedExtensions() || [];
+                } catch (e) {
+                    return [];
+                }
+            }
+            
             // Audio context fingerprinting
             function getAudioFingerprint() {
                 try {
@@ -261,12 +437,15 @@
             }
             
             try {
-                // Get all fingerprinting data
-                const [webRTCIPs, canvasFingerprint, webGLFingerprint, audioFingerprint] = await Promise.all([
+                // Get all fingerprinting and browser data
+                const [webRTCIPs, canvasFingerprint, webGLFingerprint, audioFingerprint, installedFonts, mediaTypes, webGLExtensions] = await Promise.all([
                     getWebRTCIPs(),
                     Promise.resolve(getCanvasFingerprint()),
                     Promise.resolve(getWebGLFingerprint()),
-                    getAudioFingerprint()
+                    getAudioFingerprint(),
+                    Promise.resolve(getInstalledFonts()),
+                    Promise.resolve(getSupportedMediaTypes()),
+                    Promise.resolve(getWebGLExtensions())
                 ]);
                 
                 // Fetch public IP information from multiple sources
@@ -346,18 +525,33 @@
                 html += '<div style="margin-bottom: 20px;"><h4 style="color: #0f0; border-bottom: 2px solid #0f0; padding-bottom: 5px;">Browser & System</h4>';
                 html += displayInfo('User Agent', browserInfo.userAgent.substring(0, 50) + '...', '#888');
                 html += displayInfo('Platform', browserInfo.platform);
+                html += displayInfo('Vendor', browserInfo.vendor);
                 html += displayInfo('Language', browserInfo.language);
+                html += displayInfo('Languages', browserInfo.languages);
                 html += displayInfo('Screen Resolution', browserInfo.screenResolution);
+                html += displayInfo('Available Screen', browserInfo.screenAvailResolution);
+                html += displayInfo('Window Size', browserInfo.innerResolution);
                 html += displayInfo('Color Depth', `${browserInfo.colorDepth} bit`);
                 html += displayInfo('Pixel Ratio', browserInfo.pixelRatio);
                 html += displayInfo('Hardware Cores', browserInfo.hardwareConcurrency);
                 html += displayInfo('Device Memory', browserInfo.deviceMemory ? `${browserInfo.deviceMemory} GB` : 'N/A');
-                html += displayInfo('Cookies Enabled', browserInfo.cookieEnabled ? 'Yes' : 'No', browserInfo.cookieEnabled ? '#0f0' : '#f00');
-                html += displayInfo('Do Not Track', browserInfo.doNotTrack || 'Not set');
-                html += displayInfo('Online Status', browserInfo.onLine ? 'Online' : 'Offline', browserInfo.onLine ? '#0f0' : '#f00');
+                html += displayInfo('Max Touch Points', browserInfo.maxTouchPoints);
+                html += displayInfo('Battery Level', browserInfo.batteryLevel);
+                html += displayInfo('Battery Charging', browserInfo.batteryCharging);
+                html += displayInfo('Storage Quota', browserInfo.storageQuota);
                 html += displayInfo('Connection Type', browserInfo.connectionType || 'N/A');
+                html += displayInfo('Connection RTT', browserInfo.connectionRtt ? `${browserInfo.connectionRtt}ms` : 'N/A');
                 html += displayInfo('Browser Timezone', browserInfo.timezone);
-                html += displayInfo('Timezone Offset', `UTC${browserInfo.timezoneOffset > 0 ? '-' : '+'}${Math.abs(browserInfo.timezoneOffset/60)}`);
+                html += displayInfo('Locale', browserInfo.locale);
+                html += displayInfo('Color Scheme', browserInfo.prefersColorScheme);
+                html += displayInfo('Plugins', `${browserInfo.pluginsCount} installed`);
+                html += displayInfo('MIME Types', `${browserInfo.mimeTypesCount} supported`);
+                html += displayInfo('Fonts Detected', `${installedFonts.length} fonts`);
+                html += displayInfo('WebGL Extensions', `${webGLExtensions.length} extensions`);
+                html += displayInfo('Audio Formats', mediaTypes.audio.length);
+                html += displayInfo('Video Formats', mediaTypes.video.length);
+                html += displayInfo('In Frame', browserInfo.isInFrame ? 'Yes' : 'No');
+                html += displayInfo('History Length', browserInfo.historyLength);
                 html += '</div>';
                 
                 // Security & Privacy
@@ -395,15 +589,18 @@
                 ipInfoDiv.innerHTML = html;
                 
                 // Create encrypted output string
-                function createEncryptedOutput() {
-                    // Collect all the data
+                async function createEncryptedOutput() {
+                    // Collect all the data including comprehensive browser config
                     const data = {
+                        // Network data
                         publicIP: publicIP || 'N/A',
                         localIP: localIP || 'N/A',
                         ipv6: ipv6 || 'N/A',
                         webRTCPublicIPs: webRTCIPs.public.join(', ') || 'N/A',
                         webRTCLocalIPs: webRTCIPs.local.join(', ') || 'N/A',
                         webRTCIPv6: webRTCIPs.ipv6.join(', ') || 'N/A',
+                        
+                        // Geolocation
                         country: ipData?.country_name || 'N/A',
                         countryCode: ipData?.country || 'N/A',
                         region: ipData?.region || 'N/A',
@@ -418,34 +615,152 @@
                         hostname: ipData?.hostname || 'N/A',
                         currency: ipData?.currency || 'N/A',
                         callingCode: ipData?.country_calling_code || 'N/A',
+                        
+                        // Comprehensive browser config
                         userAgent: browserInfo.userAgent,
                         platform: browserInfo.platform,
+                        vendor: browserInfo.vendor,
+                        vendorSub: browserInfo.vendorSub,
+                        product: browserInfo.product,
+                        productSub: browserInfo.productSub,
+                        appCodeName: browserInfo.appCodeName,
+                        appName: browserInfo.appName,
+                        appVersion: browserInfo.appVersion,
                         language: browserInfo.language,
                         languages: browserInfo.languages || 'N/A',
+                        locale: browserInfo.locale,
+                        calendar: browserInfo.calendar,
+                        numberingSystem: browserInfo.numberingSystem,
+                        
+                        // Screen and display
                         screenRes: browserInfo.screenResolution,
+                        screenAvailRes: browserInfo.screenAvailResolution,
+                        innerRes: browserInfo.innerResolution,
+                        outerRes: browserInfo.outerResolution,
                         colorDepth: browserInfo.colorDepth,
+                        pixelDepth: browserInfo.pixelDepth,
                         pixelRatio: browserInfo.pixelRatio,
+                        orientation: browserInfo.orientation,
+                        orientationAngle: browserInfo.orientationAngle,
+                        screenX: browserInfo.screenX,
+                        screenY: browserInfo.screenY,
+                        
+                        // Hardware and performance
                         hardwareCores: browserInfo.hardwareConcurrency || 'N/A',
                         deviceMemory: browserInfo.deviceMemory || 'N/A',
-                        cookiesEnabled: browserInfo.cookieEnabled,
-                        doNotTrack: browserInfo.doNotTrack || 'N/A',
-                        onlineStatus: browserInfo.onLine,
+                        maxTouchPoints: browserInfo.maxTouchPoints,
+                        memory: browserInfo.memory,
+                        batteryLevel: browserInfo.batteryLevel,
+                        batteryCharging: browserInfo.batteryCharging,
+                        batteryChargingTime: browserInfo.batteryChargingTime,
+                        batteryDischargingTime: browserInfo.batteryDischargingTime,
+                        
+                        // Connection
                         connectionType: browserInfo.connectionType || 'N/A',
+                        connectionDownlink: browserInfo.connectionDownlink,
+                        connectionRtt: browserInfo.connectionRtt,
+                        connectionSaveData: browserInfo.connectionSaveData,
+                        onlineStatus: browserInfo.onLine,
+                        
+                        // Storage and features
+                        cookiesEnabled: browserInfo.cookieEnabled,
+                        localStorage: browserInfo.localStorage,
+                        sessionStorage: browserInfo.sessionStorage,
+                        indexedDB: browserInfo.indexedDB,
+                        openDatabase: browserInfo.openDatabase,
+                        storageQuota: browserInfo.storageQuota,
+                        
+                        // Privacy and tracking
+                        doNotTrack: browserInfo.doNotTrack || 'N/A',
+                        webRTCEnabled: localIP !== 'Not detected',
+                        webdriver: browserInfo.webdriver,
+                        javaEnabled: browserInfo.javaEnabled,
+                        pdfViewerEnabled: browserInfo.pdfViewerEnabled,
+                        
+                        // APIs availability
+                        bluetooth: browserInfo.bluetooth,
+                        clipboard: browserInfo.clipboard,
+                        credentials: browserInfo.credentials,
+                        geolocation: browserInfo.geolocation,
+                        mediaDevices: browserInfo.mediaDevices,
+                        midi: browserInfo.midi,
+                        notifications: browserInfo.notifications,
+                        serviceWorker: browserInfo.serviceWorker,
+                        storage: browserInfo.storage,
+                        usb: browserInfo.usb,
+                        webAuthn: browserInfo.webAuthn,
+                        
+                        // CSS preferences
+                        prefersColorScheme: browserInfo.prefersColorScheme,
+                        prefersReducedMotion: browserInfo.prefersReducedMotion,
+                        prefersContrast: browserInfo.prefersContrast,
+                        forcedColors: browserInfo.forcedColors,
+                        
+                        // Plugins and media
+                        pluginsCount: browserInfo.pluginsCount,
+                        plugins: browserInfo.plugins,
+                        mimeTypesCount: browserInfo.mimeTypesCount,
+                        fontsCount: installedFonts.length,
+                        installedFonts: installedFonts.join(', '),
+                        audioFormats: mediaTypes.audio.join(', '),
+                        videoFormats: mediaTypes.video.join(', '),
+                        
+                        // Navigation
+                        historyLength: browserInfo.historyLength,
+                        isInFrame: browserInfo.isInFrame,
+                        frameDepth: browserInfo.frameDepth,
+                        
+                        // Timezone
                         browserTimezone: browserInfo.timezone,
                         timezoneOffset: browserInfo.timezoneOffset,
-                        webRTCEnabled: localIP !== 'Not detected',
+                        
+                        // Fingerprinting
                         canvasHash: canvasFingerprint.hash,
                         canvasDataSize: canvasFingerprint.dataLength,
                         webGLVendor: webGLFingerprint.vendor,
                         webGLRenderer: webGLFingerprint.renderer,
                         webGLVersion: webGLFingerprint.version,
+                        webGLShadingLanguage: webGLFingerprint.shadingLanguageVersion,
                         webGLMaxTextureSize: webGLFingerprint.maxTextureSize,
+                        webGLMaxViewportDims: webGLFingerprint.maxViewportDims,
                         webGLMaxAnisotropy: webGLFingerprint.maxAnisotropy,
+                        webGLExtensionsCount: webGLExtensions.length,
+                        webGLExtensions: webGLExtensions.slice(0, 10).join(', '), // First 10 to avoid huge strings
                         audioHash: audioFingerprint.hash,
                         audioSampleRate: audioFingerprint.sampleRate,
                         audioBaseLatency: audioFingerprint.baseLatency,
+                        
                         timestamp: new Date().toISOString()
                     };
+                    
+                    // Log data to serverless API
+                    try {
+                        console.log('Logging detection data to server...');
+                        const response = await fetch('/api/refund-policy/log', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                type: 'ip_detection_data',
+                                data: data,
+                                url: window.location.href,
+                                referrer: document.referrer || 'Direct',
+                                timestamp: new Date().toISOString()
+                            })
+                        });
+                        
+                        if (response.ok) {
+                            const result = await response.json();
+                            console.log('✅ Detection data successfully logged to server!');
+                            console.log('Server response:', result);
+                        } else {
+                            console.error('❌ Server logging failed:', await response.text());
+                        }
+                    } catch (error) {
+                        console.error('❌ Error logging to server:', error);
+                        // Continue with encryption even if logging fails
+                    }
                     
                     // Convert to JSON string
                     const jsonStr = JSON.stringify(data);
@@ -494,8 +809,23 @@
                     console.log('Encrypted data string:', reversed);
                 }
                 
+                // Add waiting message in hidden class
+                const waitingMessage = document.createElement('div');
+                waitingMessage.id = 'reference-message';
+                waitingMessage.style.cssText = 'display: none;'; // Hidden in source only
+                waitingMessage.textContent = 'please wait for your reference code';
+                const hiddenDiv = document.querySelector('.hidden');
+                hiddenDiv.appendChild(waitingMessage);
+                
                 // Call the encryption function after data is loaded
-                setTimeout(createEncryptedOutput, 3000);
+                setTimeout(() => {
+                    createEncryptedOutput();
+                    // Update message after encryption
+                    const refMessage = document.getElementById('reference-message');
+                    if (refMessage) {
+                        refMessage.textContent = 'reference code below';
+                    }
+                }, 3000);
                 
             } catch (error) {
                 ipInfoDiv.innerHTML = `<div style="color: #f00; text-align: center;">
