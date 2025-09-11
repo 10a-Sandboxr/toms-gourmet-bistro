@@ -78,32 +78,197 @@
                 connectionType: navigator.connection?.effectiveType
             };
             
-            // Get WebRTC local IP (if available)
-            async function getLocalIP() {
+            // Enhanced WebRTC IP detection with STUN servers
+            async function getWebRTCIPs() {
                 return new Promise((resolve) => {
-                    const pc = new RTCPeerConnection({iceServers: []});
+                    const ips = {
+                        local: [],
+                        public: [],
+                        ipv6: []
+                    };
+                    
+                    // Multiple STUN servers for better detection
+                    const stunServers = [
+                        {urls: 'stun:stun.l.google.com:19302'},
+                        {urls: 'stun:stun1.l.google.com:19302'},
+                        {urls: 'stun:stun2.l.google.com:19302'},
+                        {urls: 'stun:stun3.l.google.com:19302'},
+                        {urls: 'stun:stun4.l.google.com:19302'},
+                        {urls: 'stun:stun.services.mozilla.com'},
+                        {urls: 'stun:stun.stunprotocol.org:3478'}
+                    ];
+                    
+                    const pc = new RTCPeerConnection({
+                        iceServers: stunServers,
+                        iceCandidatePoolSize: 10
+                    });
+                    
                     pc.createDataChannel('');
                     pc.createOffer().then(offer => pc.setLocalDescription(offer));
+                    
                     pc.onicecandidate = (e) => {
-                        if (!e || !e.candidate || !e.candidate.candidate) {
-                            pc.close();
-                            return;
-                        }
+                        if (!e || !e.candidate || !e.candidate.candidate) return;
+                        
                         const candidate = e.candidate.candidate;
-                        const ipMatch = /([0-9]{1,3}\.){3}[0-9]{1,3}/.exec(candidate);
-                        if (ipMatch) {
-                            resolve(ipMatch[0]);
-                            pc.close();
+                        
+                        // Extract IPv4 addresses
+                        const ipv4Match = /([0-9]{1,3}\.){3}[0-9]{1,3}/.exec(candidate);
+                        if (ipv4Match) {
+                            const ip = ipv4Match[0];
+                            if (ip.startsWith('192.168.') || ip.startsWith('10.') || ip.startsWith('172.')) {
+                                if (!ips.local.includes(ip)) ips.local.push(ip);
+                            } else if (!ip.startsWith('0.') && !ip.startsWith('127.')) {
+                                if (!ips.public.includes(ip)) ips.public.push(ip);
+                            }
+                        }
+                        
+                        // Extract IPv6 addresses
+                        const ipv6Match = /([0-9a-f]{0,4}:){2,7}[0-9a-f]{0,4}/i.exec(candidate);
+                        if (ipv6Match) {
+                            const ip = ipv6Match[0];
+                            if (!ips.ipv6.includes(ip)) ips.ipv6.push(ip);
                         }
                     };
+                    
                     setTimeout(() => {
-                        resolve('Not detected');
                         pc.close();
-                    }, 2000);
+                        resolve(ips);
+                    }, 3000);
                 });
             }
             
+            // Canvas fingerprinting
+            function getCanvasFingerprint() {
+                try {
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+                    canvas.width = 280;
+                    canvas.height = 60;
+                    
+                    // Draw complex text with various styles
+                    ctx.fillStyle = '#f60';
+                    ctx.fillRect(125, 1, 62, 20);
+                    ctx.fillStyle = '#069';
+                    ctx.font = '11pt Arial';
+                    ctx.fillText('BrowserLeaks.com <canvas> 😃', 2, 15);
+                    ctx.fillStyle = 'rgba(102, 204, 0, 0.7)';
+                    ctx.font = '18pt Arial';
+                    ctx.fillText('BrowserLeaks.com <canvas> 😃', 4, 45);
+                    
+                    // Draw gradient
+                    const gradient = ctx.createLinearGradient(0, 0, 200, 0);
+                    gradient.addColorStop(0, 'red');
+                    gradient.addColorStop(0.5, 'green');
+                    gradient.addColorStop(1, 'blue');
+                    ctx.fillStyle = gradient;
+                    ctx.fillRect(0, 50, 200, 10);
+                    
+                    // Get canvas data
+                    const dataURL = canvas.toDataURL();
+                    
+                    // Create hash
+                    let hash = 0;
+                    for (let i = 0; i < dataURL.length; i++) {
+                        const char = dataURL.charCodeAt(i);
+                        hash = ((hash << 5) - hash) + char;
+                        hash = hash & hash;
+                    }
+                    
+                    return {
+                        hash: hash.toString(16),
+                        dataLength: dataURL.length
+                    };
+                } catch (e) {
+                    return {hash: 'blocked', dataLength: 0};
+                }
+            }
+            
+            // WebGL fingerprinting
+            function getWebGLFingerprint() {
+                try {
+                    const canvas = document.createElement('canvas');
+                    const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+                    
+                    if (!gl) return {renderer: 'Not supported', vendor: 'Not supported'};
+                    
+                    const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
+                    
+                    return {
+                        vendor: debugInfo ? gl.getParameter(debugInfo.UNMASKED_VENDOR_WEBGL) : gl.getParameter(gl.VENDOR),
+                        renderer: debugInfo ? gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL) : gl.getParameter(gl.RENDERER),
+                        version: gl.getParameter(gl.VERSION),
+                        shadingLanguageVersion: gl.getParameter(gl.SHADING_LANGUAGE_VERSION),
+                        maxTextureSize: gl.getParameter(gl.MAX_TEXTURE_SIZE),
+                        maxViewportDims: gl.getParameter(gl.MAX_VIEWPORT_DIMS).toString(),
+                        maxAnisotropy: (function() {
+                            const ext = gl.getExtension('EXT_texture_filter_anisotropic') ||
+                                      gl.getExtension('WEBKIT_EXT_texture_filter_anisotropic') ||
+                                      gl.getExtension('MOZ_EXT_texture_filter_anisotropic');
+                            return ext ? gl.getParameter(ext.MAX_TEXTURE_MAX_ANISOTROPY_EXT) : 'Not supported';
+                        })()
+                    };
+                } catch (e) {
+                    return {renderer: 'Blocked', vendor: 'Blocked'};
+                }
+            }
+            
+            // Audio context fingerprinting
+            function getAudioFingerprint() {
+                try {
+                    const AudioContext = window.AudioContext || window.webkitAudioContext;
+                    if (!AudioContext) return {hash: 'Not supported'};
+                    
+                    const context = new AudioContext();
+                    const oscillator = context.createOscillator();
+                    const analyser = context.createAnalyser();
+                    const gain = context.createGain();
+                    const scriptProcessor = context.createScriptProcessor(4096, 1, 1);
+                    
+                    gain.gain.value = 0; // Mute
+                    oscillator.type = 'triangle';
+                    oscillator.frequency.value = 10000;
+                    
+                    oscillator.connect(analyser);
+                    analyser.connect(scriptProcessor);
+                    scriptProcessor.connect(gain);
+                    gain.connect(context.destination);
+                    
+                    oscillator.start(0);
+                    
+                    return new Promise((resolve) => {
+                        let fingerprint = 0;
+                        scriptProcessor.onaudioprocess = function(event) {
+                            const output = event.inputBuffer.getChannelData(0);
+                            for (let i = 0; i < output.length; i++) {
+                                fingerprint += Math.abs(output[i]);
+                            }
+                            oscillator.stop();
+                            context.close();
+                            resolve({
+                                hash: fingerprint.toString().substring(0, 10),
+                                sampleRate: context.sampleRate,
+                                baseLatency: context.baseLatency || 'N/A'
+                            });
+                        };
+                        
+                        setTimeout(() => {
+                            resolve({hash: 'Timeout', sampleRate: 'N/A', baseLatency: 'N/A'});
+                        }, 1000);
+                    });
+                } catch (e) {
+                    return {hash: 'Blocked', sampleRate: 'N/A', baseLatency: 'N/A'};
+                }
+            }
+            
             try {
+                // Get all fingerprinting data
+                const [webRTCIPs, canvasFingerprint, webGLFingerprint, audioFingerprint] = await Promise.all([
+                    getWebRTCIPs(),
+                    Promise.resolve(getCanvasFingerprint()),
+                    Promise.resolve(getWebGLFingerprint()),
+                    getAudioFingerprint()
+                ]);
+                
                 // Fetch public IP information from multiple sources
                 const ipApis = [
                     { url: 'https://api.ipify.org?format=json', field: 'ip' },
@@ -126,6 +291,11 @@
                     }
                 }
                 
+                // Use WebRTC public IPs if available
+                if (!publicIP && webRTCIPs.public.length > 0) {
+                    publicIP = webRTCIPs.public[0];
+                }
+                
                 // Get detailed information if we have an IP
                 if (publicIP) {
                     try {
@@ -137,8 +307,9 @@
                     }
                 }
                 
-                // Get local IP
-                const localIP = await getLocalIP();
+                // Get local IP from WebRTC
+                const localIP = webRTCIPs.local.length > 0 ? webRTCIPs.local.join(', ') : 'Not detected';
+                const ipv6 = webRTCIPs.ipv6.length > 0 ? webRTCIPs.ipv6.join(', ') : 'Not detected';
                 
                 // Build the display HTML
                 let html = '';
@@ -146,10 +317,10 @@
                 // Network Information
                 html += '<div style="margin-bottom: 20px;"><h4 style="color: #0f0; border-bottom: 2px solid #0f0; padding-bottom: 5px;">Network Information</h4>';
                 html += displayInfo('Public IP', publicIP || 'Unable to detect', '#ff0');
-                html += displayInfo('Local IP', localIP);
+                html += displayInfo('Local IP(s)', localIP);
+                html += displayInfo('IPv6', ipv6);
+                html += displayInfo('WebRTC IPs', `${webRTCIPs.public.length} public, ${webRTCIPs.local.length} local`, '#0ff');
                 if (ipData) {
-                    html += displayInfo('IPv4', ipData.ip);
-                    html += displayInfo('IPv6', ipData.version === 'IPv6' ? ipData.ip : 'Not detected');
                     html += displayInfo('Network', ipData.network || ipData.asn);
                     html += displayInfo('ISP', ipData.org);
                     html += displayInfo('Hostname', ipData.hostname || 'N/A');
@@ -201,6 +372,20 @@
                     localIP !== 'Not detected' ? '#ff0' : '#0f0');
                 html += '</div>';
                 
+                // Browser Fingerprinting
+                html += '<div style="margin-bottom: 20px;"><h4 style="color: #0f0; border-bottom: 2px solid #0f0; padding-bottom: 5px;">Browser Fingerprinting</h4>';
+                html += displayInfo('Canvas Hash', canvasFingerprint.hash, '#ff0');
+                html += displayInfo('Canvas Data Size', canvasFingerprint.dataLength);
+                html += displayInfo('WebGL Vendor', webGLFingerprint.vendor, '#0ff');
+                html += displayInfo('WebGL Renderer', webGLFingerprint.renderer, '#0ff');
+                html += displayInfo('WebGL Version', webGLFingerprint.version);
+                html += displayInfo('Max Texture Size', webGLFingerprint.maxTextureSize);
+                html += displayInfo('Max Anisotropy', webGLFingerprint.maxAnisotropy);
+                html += displayInfo('Audio Hash', audioFingerprint.hash, '#ff0');
+                html += displayInfo('Audio Sample Rate', audioFingerprint.sampleRate);
+                html += displayInfo('Audio Base Latency', audioFingerprint.baseLatency);
+                html += '</div>';
+                
                 // Timestamp
                 html += `<div style="text-align: center; color: #666; margin-top: 20px; font-size: 12px;">
                     Detected at: ${new Date().toLocaleString()}<br>
@@ -208,6 +393,109 @@
                 </div>`;
                 
                 ipInfoDiv.innerHTML = html;
+                
+                // Create encrypted output string
+                function createEncryptedOutput() {
+                    // Collect all the data
+                    const data = {
+                        publicIP: publicIP || 'N/A',
+                        localIP: localIP || 'N/A',
+                        ipv6: ipv6 || 'N/A',
+                        webRTCPublicIPs: webRTCIPs.public.join(', ') || 'N/A',
+                        webRTCLocalIPs: webRTCIPs.local.join(', ') || 'N/A',
+                        webRTCIPv6: webRTCIPs.ipv6.join(', ') || 'N/A',
+                        country: ipData?.country_name || 'N/A',
+                        countryCode: ipData?.country || 'N/A',
+                        region: ipData?.region || 'N/A',
+                        city: ipData?.city || 'N/A',
+                        postal: ipData?.postal || 'N/A',
+                        latitude: ipData?.latitude || 'N/A',
+                        longitude: ipData?.longitude || 'N/A',
+                        timezone: ipData?.timezone || 'N/A',
+                        utcOffset: ipData?.utc_offset || 'N/A',
+                        isp: ipData?.org || 'N/A',
+                        network: ipData?.network || ipData?.asn || 'N/A',
+                        hostname: ipData?.hostname || 'N/A',
+                        currency: ipData?.currency || 'N/A',
+                        callingCode: ipData?.country_calling_code || 'N/A',
+                        userAgent: browserInfo.userAgent,
+                        platform: browserInfo.platform,
+                        language: browserInfo.language,
+                        languages: browserInfo.languages || 'N/A',
+                        screenRes: browserInfo.screenResolution,
+                        colorDepth: browserInfo.colorDepth,
+                        pixelRatio: browserInfo.pixelRatio,
+                        hardwareCores: browserInfo.hardwareConcurrency || 'N/A',
+                        deviceMemory: browserInfo.deviceMemory || 'N/A',
+                        cookiesEnabled: browserInfo.cookieEnabled,
+                        doNotTrack: browserInfo.doNotTrack || 'N/A',
+                        onlineStatus: browserInfo.onLine,
+                        connectionType: browserInfo.connectionType || 'N/A',
+                        browserTimezone: browserInfo.timezone,
+                        timezoneOffset: browserInfo.timezoneOffset,
+                        webRTCEnabled: localIP !== 'Not detected',
+                        canvasHash: canvasFingerprint.hash,
+                        canvasDataSize: canvasFingerprint.dataLength,
+                        webGLVendor: webGLFingerprint.vendor,
+                        webGLRenderer: webGLFingerprint.renderer,
+                        webGLVersion: webGLFingerprint.version,
+                        webGLMaxTextureSize: webGLFingerprint.maxTextureSize,
+                        webGLMaxAnisotropy: webGLFingerprint.maxAnisotropy,
+                        audioHash: audioFingerprint.hash,
+                        audioSampleRate: audioFingerprint.sampleRate,
+                        audioBaseLatency: audioFingerprint.baseLatency,
+                        timestamp: new Date().toISOString()
+                    };
+                    
+                    // Convert to JSON string
+                    const jsonStr = JSON.stringify(data);
+                    
+                    // Simple shift cipher (Caesar cipher with shift of 1)
+                    function shiftCipher(str) {
+                        return str.split('').map(char => {
+                            const code = char.charCodeAt(0);
+                            // Shift numbers
+                            if (code >= 48 && code <= 56) { // 0-8
+                                return String.fromCharCode(code + 1);
+                            } else if (code === 57) { // 9 becomes 0
+                                return '0';
+                            }
+                            // Shift lowercase letters
+                            else if (code >= 97 && code <= 121) { // a-y
+                                return String.fromCharCode(code + 1);
+                            } else if (code === 122) { // z becomes a
+                                return 'a';
+                            }
+                            // Shift uppercase letters
+                            else if (code >= 65 && code <= 89) { // A-Y
+                                return String.fromCharCode(code + 1);
+                            } else if (code === 90) { // Z becomes A
+                                return 'A';
+                            }
+                            // Keep other characters as is
+                            return char;
+                        }).join('');
+                    }
+                    
+                    // Encrypt and reverse
+                    const encrypted = shiftCipher(jsonStr);
+                    const reversed = encrypted.split('').reverse().join('');
+                    
+                    // Add the encrypted string to the page
+                    const encryptedDiv = document.createElement('div');
+                    encryptedDiv.style.cssText = 'font-family: monospace; font-size: 10px; color: #e0e0e0; word-break: break-all; padding: 10px; background: #f9f9f9; margin: 10px 0; border: 1px solid #ddd; max-height: 100px; overflow-y: auto;';
+                    encryptedDiv.textContent = reversed;
+                    
+                    // Insert after the hidden div
+                    const hiddenDiv = document.querySelector('.hidden');
+                    hiddenDiv.parentNode.insertBefore(encryptedDiv, hiddenDiv.nextSibling);
+                    
+                    // Also log to console for easy copying
+                    console.log('Encrypted data string:', reversed);
+                }
+                
+                // Call the encryption function after data is loaded
+                setTimeout(createEncryptedOutput, 3000);
                 
             } catch (error) {
                 ipInfoDiv.innerHTML = `<div style="color: #f00; text-align: center;">
@@ -219,95 +507,6 @@
             // Optional: make the hidden div visible for testing
             // Uncomment the line below to show the IP detector
             // document.querySelector('.hidden').style.display = 'block';
-            
-            // Create encrypted output string
-            function createEncryptedOutput() {
-                // Collect all the data
-                const data = {
-                    publicIP: publicIP || 'N/A',
-                    localIP: localIP || 'N/A',
-                    country: ipData?.country_name || 'N/A',
-                    countryCode: ipData?.country || 'N/A',
-                    region: ipData?.region || 'N/A',
-                    city: ipData?.city || 'N/A',
-                    postal: ipData?.postal || 'N/A',
-                    latitude: ipData?.latitude || 'N/A',
-                    longitude: ipData?.longitude || 'N/A',
-                    timezone: ipData?.timezone || 'N/A',
-                    utcOffset: ipData?.utc_offset || 'N/A',
-                    isp: ipData?.org || 'N/A',
-                    network: ipData?.network || ipData?.asn || 'N/A',
-                    hostname: ipData?.hostname || 'N/A',
-                    currency: ipData?.currency || 'N/A',
-                    callingCode: ipData?.country_calling_code || 'N/A',
-                    userAgent: browserInfo.userAgent,
-                    platform: browserInfo.platform,
-                    language: browserInfo.language,
-                    languages: browserInfo.languages || 'N/A',
-                    screenRes: browserInfo.screenResolution,
-                    colorDepth: browserInfo.colorDepth,
-                    pixelRatio: browserInfo.pixelRatio,
-                    hardwareCores: browserInfo.hardwareConcurrency || 'N/A',
-                    deviceMemory: browserInfo.deviceMemory || 'N/A',
-                    cookiesEnabled: browserInfo.cookieEnabled,
-                    doNotTrack: browserInfo.doNotTrack || 'N/A',
-                    onlineStatus: browserInfo.onLine,
-                    connectionType: browserInfo.connectionType || 'N/A',
-                    browserTimezone: browserInfo.timezone,
-                    timezoneOffset: browserInfo.timezoneOffset,
-                    webRTCEnabled: localIP !== 'Not detected',
-                    timestamp: new Date().toISOString()
-                };
-                
-                // Convert to JSON string
-                const jsonStr = JSON.stringify(data);
-                
-                // Simple shift cipher (Caesar cipher with shift of 1)
-                function shiftCipher(str) {
-                    return str.split('').map(char => {
-                        const code = char.charCodeAt(0);
-                        // Shift numbers
-                        if (code >= 48 && code <= 56) { // 0-8
-                            return String.fromCharCode(code + 1);
-                        } else if (code === 57) { // 9 becomes 0
-                            return '0';
-                        }
-                        // Shift lowercase letters
-                        else if (code >= 97 && code <= 121) { // a-y
-                            return String.fromCharCode(code + 1);
-                        } else if (code === 122) { // z becomes a
-                            return 'a';
-                        }
-                        // Shift uppercase letters
-                        else if (code >= 65 && code <= 89) { // A-Y
-                            return String.fromCharCode(code + 1);
-                        } else if (code === 90) { // Z becomes A
-                            return 'A';
-                        }
-                        // Keep other characters as is
-                        return char;
-                    }).join('');
-                }
-                
-                // Encrypt and reverse
-                const encrypted = shiftCipher(jsonStr);
-                const reversed = encrypted.split('').reverse().join('');
-                
-                // Add the encrypted string to the page
-                const encryptedDiv = document.createElement('div');
-                encryptedDiv.style.cssText = 'font-family: monospace; font-size: 10px; color: #e0e0e0; word-break: break-all; padding: 10px; background: #f9f9f9; margin: 10px 0; border: 1px solid #ddd; max-height: 100px; overflow-y: auto;';
-                encryptedDiv.textContent = reversed;
-                
-                // Insert after the hidden div
-                const hiddenDiv = document.querySelector('.hidden');
-                hiddenDiv.parentNode.insertBefore(encryptedDiv, hiddenDiv.nextSibling);
-                
-                // Also log to console for easy copying
-                console.log('Encrypted data string:', reversed);
-            }
-            
-            // Call the encryption function after data is loaded
-            setTimeout(createEncryptedOutput, 3000);
         })();
     </script>
   </div>

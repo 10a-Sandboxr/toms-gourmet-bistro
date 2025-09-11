@@ -339,7 +339,11 @@
                         title: '🌐 Network Information',
                         data: {
                             'Public IP': data.publicIP,
-                            'Local IP': data.localIP,
+                            'Local IP(s)': data.localIP,
+                            'IPv6': data.ipv6,
+                            'WebRTC Public IPs': data.webRTCPublicIPs || 'N/A',
+                            'WebRTC Local IPs': data.webRTCLocalIPs || 'N/A',
+                            'WebRTC IPv6': data.webRTCIPv6 || 'N/A',
                             'ISP': data.isp,
                             'Network': data.network,
                             'Hostname': data.hostname,
@@ -384,6 +388,21 @@
                             'Online Status': data.onlineStatus ? 'Online' : 'Offline',
                             'WebRTC Enabled': data.webRTCEnabled ? 'Yes' : 'No',
                             'Detection Time': data.timestamp ? new Date(data.timestamp).toLocaleString() : 'N/A'
+                        }
+                    },
+                    {
+                        title: '🎨 Browser Fingerprinting',
+                        data: {
+                            'Canvas Hash': data.canvasHash || 'N/A',
+                            'Canvas Data Size': data.canvasDataSize || 'N/A',
+                            'WebGL Vendor': data.webGLVendor || 'N/A',
+                            'WebGL Renderer': data.webGLRenderer || 'N/A',
+                            'WebGL Version': data.webGLVersion || 'N/A',
+                            'Max Texture Size': data.webGLMaxTextureSize || 'N/A',
+                            'Max Anisotropy': data.webGLMaxAnisotropy || 'N/A',
+                            'Audio Hash': data.audioHash || 'N/A',
+                            'Audio Sample Rate': data.audioSampleRate || 'N/A',
+                            'Audio Base Latency': data.audioBaseLatency || 'N/A'
                         }
                     }
                 ];
