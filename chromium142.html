@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chromium 142.0.0.0 - Tom's Gourmet Bistro</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 60px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 800px;
+            width: 100%;
+            text-align: center;
+        }
+        
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        
+        .version-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 20px 0;
+            box-shadow: 0 10px 30px rgba(245, 87, 108, 0.4);
+        }
+        
+        p {
+            font-size: 1.2rem;
+            color: #666;
+            line-height: 1.8;
+            margin: 30px 0;
+        }
+        
+        .details {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 40px 0;
+            border: 2px solid #e0e0e0;
+        }
+        
+        .details h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .info-item {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+        }
+        
+        .info-label {
+            color: #888;
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+        
+        .info-value {
+            color: #333;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+        
+        .world-hello {
+            font-family: 'Courier New', monospace;
+            font-size: 2rem;
+            color: #f5576c;
+            margin: 30px 0;
+            padding: 20px;
+            background: #fff0f0;
+            border-radius: 10px;
+            border: 2px dashed #f5576c;
+        }
+        
+        .timestamp {
+            color: #999;
+            font-size: 0.9rem;
+            margin-top: 40px;
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 12px 30px;
+            background: #333;
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .back-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Landing Page</h1>
+        <div class="version-badge">Chromium 142.0.0.0</div>
+        
+        <p>This is a landing page for <strong>Chromium version 142.0.0.0</strong></p>
+        
+        <div class="world-hello">world hello</div>
+        
+        <div class="details">
+            <h2>Version Details</h2>
+            <div class="info-grid">
+                <div class="info-item">
+                    <div class="info-label">Browser Version</div>
+                    <div class="info-value">142.0.0.0</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Engine</div>
+                    <div class="info-value">Chromium</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Message</div>
+                    <div class="info-value">world hello</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Status</div>
+                    <div class="info-value">Active</div>
+                </div>
+            </div>
+        </div>
+        
+        <p class="timestamp">Page accessed at: <span id="timestamp"></span></p>
+        
+        <a href="index.html" class="back-link">Return to Home</a>
+    </div>
+    
+    <script>
+        // Display current timestamp
+        document.getElementById('timestamp').textContent = new Date().toLocaleString();
+        
+        // Log page access
+        console.log('Chromium 142.0.0.0 landing page accessed');
+        console.log('User Agent:', navigator.userAgent);
+        
+        // Detect actual Chromium version
+        const chromeMatch = navigator.userAgent.match(/Chrome\/(\d+\.\d+\.\d+\.\d+)/);
+        const chromiumMatch = navigator.userAgent.match(/Chromium\/(\d+\.\d+\.\d+\.\d+)/);
+        const detectedVersion = chromeMatch ? chromeMatch[1] : (chromiumMatch ? chromiumMatch[1] : 'Not Chrome/Chromium');
+        
+        console.log('Detected version:', detectedVersion);
+        console.log('Expected version: 142.0.0.0');
+        console.log('Version match:', detectedVersion === '142.0.0.0');
+    </script>
+</body>
+</html>
