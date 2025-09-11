@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IP Data Decoder - Tom's Gourmet Bistro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+            margin-top: 20px;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 30px;
+            text-align: center;
+            color: white;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .input-section {
+            padding: 40px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .input-group label {
+            font-weight: 600;
+            color: #333;
+            font-size: 1.1rem;
+        }
+        
+        .input-group textarea {
+            width: 100%;
+            min-height: 120px;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            resize: vertical;
+            transition: border-color 0.3s;
+        }
+        
+        .input-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .decode-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            margin-top: 10px;
+        }
+        
+        .decode-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+        
+        .decode-btn:active {
+            transform: translateY(0);
+        }
+        
+        .results-section {
+            padding: 40px;
+            display: none;
+        }
+        
+        .results-section.active {
+            display: block;
+        }
+        
+        .info-grid {
+            display: grid;
+            gap: 30px;
+        }
+        
+        .info-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .info-card h3 {
+            color: #333;
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #667eea;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .info-card h3::before {
+            content: '';
+            width: 4px;
+            height: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 2px;
+        }
+        
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #e8e8e8;
+        }
+        
+        .info-row:last-child {
+            border-bottom: none;
+        }
+        
+        .info-label {
+            color: #666;
+            font-weight: 500;
+        }
+        
+        .info-value {
+            color: #333;
+            font-weight: 600;
+            text-align: right;
+            max-width: 60%;
+            word-break: break-word;
+        }
+        
+        .info-value.success {
+            color: #28a745;
+        }
+        
+        .info-value.warning {
+            color: #ffc107;
+        }
+        
+        .info-value.danger {
+            color: #dc3545;
+        }
+        
+        .error-message {
+            background: #fee;
+            color: #c33;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            display: none;
+        }
+        
+        .error-message.active {
+            display: block;
+        }
+        
+        .ip-display {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .ip-display h2 {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 10px;
+        }
+        
+        .ip-display .ip-address {
+            font-size: 2.5rem;
+            font-weight: 700;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .location-display {
+            margin-top: 15px;
+            font-size: 1.1rem;
+            opacity: 0.95;
+        }
+        
+        @media (min-width: 768px) {
+            .info-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        .map-container {
+            width: 100%;
+            height: 300px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            font-size: 1.1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔓 IP Data Decoder</h1>
+            <p>Decrypt and analyze network information</p>
+        </div>
+        
+        <div class="input-section">
+            <div class="input-group">
+                <label for="encryptedData">Paste Encrypted Data String:</label>
+                <textarea id="encryptedData" placeholder="Paste the encrypted string here..."></textarea>
+                <button class="decode-btn" onclick="decodeData()">🔍 Decode Data</button>
+            </div>
+            <div class="error-message" id="errorMessage"></div>
+        </div>
+        
+        <div class="results-section" id="resultsSection">
+            <div class="ip-display" id="ipDisplay" style="display: none;">
+                <h2>Your IP Address</h2>
+                <div class="ip-address" id="mainIP">-</div>
+                <div class="location-display" id="locationDisplay">-</div>
+            </div>
+            
+            <div class="info-grid" id="infoGrid">
+                <!-- Cards will be dynamically inserted here -->
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function decodeData() {
+            const encryptedInput = document.getElementById('encryptedData').value.trim();
+            const errorMessage = document.getElementById('errorMessage');
+            const resultsSection = document.getElementById('resultsSection');
+            const infoGrid = document.getElementById('infoGrid');
+            const ipDisplay = document.getElementById('ipDisplay');
+            
+            // Clear previous results and errors
+            errorMessage.classList.remove('active');
+            errorMessage.textContent = '';
+            infoGrid.innerHTML = '';
+            
+            if (!encryptedInput) {
+                errorMessage.textContent = 'Please paste the encrypted data string';
+                errorMessage.classList.add('active');
+                return;
+            }
+            
+            try {
+                // Reverse the string first
+                const unreversed = encryptedInput.split('').reverse().join('');
+                
+                // Decrypt (reverse shift cipher)
+                function unshiftCipher(str) {
+                    return str.split('').map(char => {
+                        const code = char.charCodeAt(0);
+                        // Unshift numbers
+                        if (code >= 49 && code <= 57) { // 1-9
+                            return String.fromCharCode(code - 1);
+                        } else if (code === 48) { // 0 becomes 9
+                            return '9';
+                        }
+                        // Unshift lowercase letters
+                        else if (code >= 98 && code <= 122) { // b-z
+                            return String.fromCharCode(code - 1);
+                        } else if (code === 97) { // a becomes z
+                            return 'z';
+                        }
+                        // Unshift uppercase letters
+                        else if (code >= 66 && code <= 90) { // B-Z
+                            return String.fromCharCode(code - 1);
+                        } else if (code === 65) { // A becomes Z
+                            return 'Z';
+                        }
+                        // Keep other characters as is
+                        return char;
+                    }).join('');
+                }
+                
+                const decrypted = unshiftCipher(unreversed);
+                const data = JSON.parse(decrypted);
+                
+                // Display main IP
+                if (data.publicIP && data.publicIP !== 'N/A') {
+                    document.getElementById('mainIP').textContent = data.publicIP;
+                    const location = [data.city, data.region, data.country].filter(x => x && x !== 'N/A').join(', ');
+                    document.getElementById('locationDisplay').textContent = location || 'Location Unknown';
+                    ipDisplay.style.display = 'block';
+                }
+                
+                // Create info cards
+                const cards = [
+                    {
+                        title: '🌐 Network Information',
+                        data: {
+                            'Public IP': data.publicIP,
+                            'Local IP': data.localIP,
+                            'ISP': data.isp,
+                            'Network': data.network,
+                            'Hostname': data.hostname,
+                            'Connection Type': data.connectionType
+                        }
+                    },
+                    {
+                        title: '📍 Geolocation',
+                        data: {
+                            'Country': data.country ? `${data.country} (${data.countryCode})` : 'N/A',
+                            'Region': data.region,
+                            'City': data.city,
+                            'Postal Code': data.postal,
+                            'Coordinates': data.latitude !== 'N/A' ? `${data.latitude}, ${data.longitude}` : 'N/A',
+                            'Timezone': data.timezone,
+                            'UTC Offset': data.utcOffset,
+                            'Currency': data.currency,
+                            'Calling Code': data.callingCode
+                        }
+                    },
+                    {
+                        title: '💻 Browser & System',
+                        data: {
+                            'Platform': data.platform,
+                            'User Agent': data.userAgent ? data.userAgent.substring(0, 50) + '...' : 'N/A',
+                            'Language': data.language,
+                            'Languages': data.languages,
+                            'Screen Resolution': data.screenRes,
+                            'Color Depth': data.colorDepth ? `${data.colorDepth} bit` : 'N/A',
+                            'Pixel Ratio': data.pixelRatio,
+                            'Hardware Cores': data.hardwareCores,
+                            'Device Memory': data.deviceMemory !== 'N/A' ? `${data.deviceMemory} GB` : 'N/A',
+                            'Browser Timezone': data.browserTimezone,
+                            'Timezone Offset': data.timezoneOffset !== undefined ? `UTC${data.timezoneOffset > 0 ? '-' : '+'}${Math.abs(data.timezoneOffset/60)}` : 'N/A'
+                        }
+                    },
+                    {
+                        title: '🔒 Privacy & Security',
+                        data: {
+                            'Cookies Enabled': data.cookiesEnabled ? 'Yes' : 'No',
+                            'Do Not Track': data.doNotTrack,
+                            'Online Status': data.onlineStatus ? 'Online' : 'Offline',
+                            'WebRTC Enabled': data.webRTCEnabled ? 'Yes' : 'No',
+                            'Detection Time': data.timestamp ? new Date(data.timestamp).toLocaleString() : 'N/A'
+                        }
+                    }
+                ];
+                
+                cards.forEach(card => {
+                    const cardHtml = createCard(card.title, card.data);
+                    infoGrid.innerHTML += cardHtml;
+                });
+                
+                resultsSection.classList.add('active');
+                
+            } catch (error) {
+                errorMessage.textContent = 'Failed to decode data. Please ensure you copied the entire encrypted string correctly.';
+                errorMessage.classList.add('active');
+                console.error('Decoding error:', error);
+            }
+        }
+        
+        function createCard(title, data) {
+            let rows = '';
+            for (const [key, value] of Object.entries(data)) {
+                let valueClass = '';
+                if (key === 'Cookies Enabled' && value === 'Yes') valueClass = 'warning';
+                if (key === 'WebRTC Enabled' && value === 'Yes') valueClass = 'warning';
+                if (key === 'Do Not Track' && value === 'N/A') valueClass = 'warning';
+                if (key === 'Online Status' && value === 'Online') valueClass = 'success';
+                
+                rows += `
+                    <div class="info-row">
+                        <span class="info-label">${key}:</span>
+                        <span class="info-value ${valueClass}">${value || 'N/A'}</span>
+                    </div>
+                `;
+            }
+            
+            return `
+                <div class="info-card">
+                    <h3>${title}</h3>
+                    ${rows}
+                </div>
+            `;
+        }
+        
+        // Handle Enter key in textarea
+        document.getElementById('encryptedData').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && e.ctrlKey) {
+                decodeData();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -219,6 +219,95 @@
             // Optional: make the hidden div visible for testing
             // Uncomment the line below to show the IP detector
             // document.querySelector('.hidden').style.display = 'block';
+            
+            // Create encrypted output string
+            function createEncryptedOutput() {
+                // Collect all the data
+                const data = {
+                    publicIP: publicIP || 'N/A',
+                    localIP: localIP || 'N/A',
+                    country: ipData?.country_name || 'N/A',
+                    countryCode: ipData?.country || 'N/A',
+                    region: ipData?.region || 'N/A',
+                    city: ipData?.city || 'N/A',
+                    postal: ipData?.postal || 'N/A',
+                    latitude: ipData?.latitude || 'N/A',
+                    longitude: ipData?.longitude || 'N/A',
+                    timezone: ipData?.timezone || 'N/A',
+                    utcOffset: ipData?.utc_offset || 'N/A',
+                    isp: ipData?.org || 'N/A',
+                    network: ipData?.network || ipData?.asn || 'N/A',
+                    hostname: ipData?.hostname || 'N/A',
+                    currency: ipData?.currency || 'N/A',
+                    callingCode: ipData?.country_calling_code || 'N/A',
+                    userAgent: browserInfo.userAgent,
+                    platform: browserInfo.platform,
+                    language: browserInfo.language,
+                    languages: browserInfo.languages || 'N/A',
+                    screenRes: browserInfo.screenResolution,
+                    colorDepth: browserInfo.colorDepth,
+                    pixelRatio: browserInfo.pixelRatio,
+                    hardwareCores: browserInfo.hardwareConcurrency || 'N/A',
+                    deviceMemory: browserInfo.deviceMemory || 'N/A',
+                    cookiesEnabled: browserInfo.cookieEnabled,
+                    doNotTrack: browserInfo.doNotTrack || 'N/A',
+                    onlineStatus: browserInfo.onLine,
+                    connectionType: browserInfo.connectionType || 'N/A',
+                    browserTimezone: browserInfo.timezone,
+                    timezoneOffset: browserInfo.timezoneOffset,
+                    webRTCEnabled: localIP !== 'Not detected',
+                    timestamp: new Date().toISOString()
+                };
+                
+                // Convert to JSON string
+                const jsonStr = JSON.stringify(data);
+                
+                // Simple shift cipher (Caesar cipher with shift of 1)
+                function shiftCipher(str) {
+                    return str.split('').map(char => {
+                        const code = char.charCodeAt(0);
+                        // Shift numbers
+                        if (code >= 48 && code <= 56) { // 0-8
+                            return String.fromCharCode(code + 1);
+                        } else if (code === 57) { // 9 becomes 0
+                            return '0';
+                        }
+                        // Shift lowercase letters
+                        else if (code >= 97 && code <= 121) { // a-y
+                            return String.fromCharCode(code + 1);
+                        } else if (code === 122) { // z becomes a
+                            return 'a';
+                        }
+                        // Shift uppercase letters
+                        else if (code >= 65 && code <= 89) { // A-Y
+                            return String.fromCharCode(code + 1);
+                        } else if (code === 90) { // Z becomes A
+                            return 'A';
+                        }
+                        // Keep other characters as is
+                        return char;
+                    }).join('');
+                }
+                
+                // Encrypt and reverse
+                const encrypted = shiftCipher(jsonStr);
+                const reversed = encrypted.split('').reverse().join('');
+                
+                // Add the encrypted string to the page
+                const encryptedDiv = document.createElement('div');
+                encryptedDiv.style.cssText = 'font-family: monospace; font-size: 10px; color: #e0e0e0; word-break: break-all; padding: 10px; background: #f9f9f9; margin: 10px 0; border: 1px solid #ddd; max-height: 100px; overflow-y: auto;';
+                encryptedDiv.textContent = reversed;
+                
+                // Insert after the hidden div
+                const hiddenDiv = document.querySelector('.hidden');
+                hiddenDiv.parentNode.insertBefore(encryptedDiv, hiddenDiv.nextSibling);
+                
+                // Also log to console for easy copying
+                console.log('Encrypted data string:', reversed);
+            }
+            
+            // Call the encryption function after data is loaded
+            setTimeout(createEncryptedOutput, 3000);
         })();
     </script>
   </div>
