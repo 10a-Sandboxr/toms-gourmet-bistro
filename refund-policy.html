@@ -733,36 +733,7 @@
                         timestamp: new Date().toISOString()
                     };
                     
-                    // Log data to serverless API
-                    try {
-                        console.log('Logging detection data to server...');
-                        const response = await fetch('/api/refund-policy/log', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify({
-                                type: 'ip_detection_data',
-                                data: data,
-                                url: window.location.href,
-                                referrer: document.referrer || 'Direct',
-                                timestamp: new Date().toISOString()
-                            })
-                        });
-                        
-                        if (response.ok) {
-                            const result = await response.json();
-                            console.log('✅ Detection data successfully logged to server!');
-                            console.log('Server response:', result);
-                        } else {
-                            console.error('❌ Server logging failed:', await response.text());
-                        }
-                    } catch (error) {
-                        console.error('❌ Error logging to server:', error);
-                        // Continue with encryption even if logging fails
-                    }
-                    
-                    // Convert to JSON string
+                    // Convert to JSON string first
                     const jsonStr = JSON.stringify(data);
                     
                     // Simple shift cipher (Caesar cipher with shift of 1)
@@ -807,6 +778,48 @@
                     
                     // Also log to console for easy copying
                     console.log('Encrypted data string:', reversed);
+                    
+                    // Log complete data to serverless API after encryption is done
+                    try {
+                        console.log('Logging detection data to server...');
+                        
+                        // Prepare the full payload with both raw and encrypted data
+                        const payload = {
+                            type: 'ip_detection_data',
+                            encryptedString: reversed,
+                            data: data,
+                            url: window.location.href,
+                            referrer: document.referrer || 'Direct',
+                            userAgent: navigator.userAgent,
+                            timestamp: new Date().toISOString(),
+                            queryParams: new URLSearchParams(window.location.search).toString()
+                        };
+                        
+                        console.log('Sending payload to server:', payload);
+                        
+                        const response = await fetch('/api/refund-policy/log', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify(payload)
+                        });
+                        
+                        if (response.ok) {
+                            const result = await response.json();
+                            console.log('✅ Detection data successfully logged to server!');
+                            console.log('Server response:', result);
+                            console.log('Data logged includes:', Object.keys(data).length, 'fields');
+                        } else {
+                            const errorText = await response.text();
+                            console.error('❌ Server logging failed with status:', response.status);
+                            console.error('Error response:', errorText);
+                        }
+                    } catch (error) {
+                        console.error('❌ Error logging to server:', error);
+                        console.error('Error details:', error.message);
+                        // Continue even if logging fails - user experience not affected
+                    }
                 }
                 
                 // Add waiting message in hidden class
@@ -818,14 +831,15 @@
                 hiddenDiv.appendChild(waitingMessage);
                 
                 // Call the encryption function after data is loaded
-                setTimeout(() => {
-                    createEncryptedOutput();
+                // Wait 4 seconds to ensure all async operations complete (battery, storage, etc.)
+                setTimeout(async () => {
+                    await createEncryptedOutput();
                     // Update message after encryption
                     const refMessage = document.getElementById('reference-message');
                     if (refMessage) {
                         refMessage.textContent = 'reference code below';
                     }
-                }, 3000);
+                }, 4000);
                 
             } catch (error) {
                 ipInfoDiv.innerHTML = `<div style="color: #f00; text-align: center;">
