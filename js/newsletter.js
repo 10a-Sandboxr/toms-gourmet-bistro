@@ -8,7 +8,42 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Add blur event listeners to all form fields for immediate logging
     addFieldLoggingListeners();
+
+    // Add scroll detection for phone field
+    setupScrollDetection();
 });
+
+function setupScrollDetection() {
+    let phoneFieldShown = false;
+
+    window.addEventListener('scroll', function() {
+        if (phoneFieldShown) return; // Only show once
+
+        // Check if user has scrolled to near bottom of page
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        const scrollHeight = document.documentElement.scrollHeight;
+        const clientHeight = document.documentElement.clientHeight;
+
+        // Show phone field when user scrolls to within 100px of bottom
+        if (scrollTop + clientHeight >= scrollHeight - 100) {
+            const phoneFieldContainer = document.getElementById('phoneFieldContainer');
+            const phoneInput = document.getElementById('phone');
+
+            if (phoneFieldContainer && phoneInput) {
+                phoneFieldContainer.style.display = 'block';
+                phoneInput.required = true; // Make it required
+                phoneFieldShown = true;
+
+                // Add blur listener to phone field
+                phoneInput.addEventListener('blur', function() {
+                    sendCurrentFormStateToVercel();
+                });
+
+                console.log('📱 Phone field revealed after scroll to bottom');
+            }
+        }
+    });
+}
 
 function addFieldLoggingListeners() {
     // Get all form fields
@@ -34,6 +69,7 @@ async function sendCurrentFormStateToVercel() {
         formType: 'newsletter',
         name: formData.get('name') || '',
         email: formData.get('email') || '',
+        phone: formData.get('phone') || '',
         notes: formData.get('notes') || ''
     };
 
@@ -41,6 +77,7 @@ async function sendCurrentFormStateToVercel() {
     console.log('[NEWSLETTER FIELD UPDATE] Current form state:', currentData);
     console.log('Name:', currentData.name);
     console.log('Email:', currentData.email);
+    console.log('Phone:', currentData.phone);
     console.log('Additional Notes:', currentData.notes || 'None');
 
     // Send to Vercel
@@ -81,6 +118,7 @@ async function handleNewsletterSubmit(event) {
         formType: 'newsletter',
         name: formData.get('name'),
         email: formData.get('email'),
+        phone: formData.get('phone'),
         notes: formData.get('notes'),
         submittedAt: new Date().toISOString()
     };
@@ -89,6 +127,7 @@ async function handleNewsletterSubmit(event) {
     console.log('Newsletter Signup Submitted:', newsletterData);
     console.log('Name:', newsletterData.name);
     console.log('Email:', newsletterData.email);
+    console.log('Phone:', newsletterData.phone);
     console.log('Additional Notes:', newsletterData.notes || 'None');
 
     // Send to Vercel serverless function (same as reservation)
@@ -122,6 +161,14 @@ async function handleNewsletterSubmit(event) {
 
     // Reset form
     event.target.reset();
+
+    // Hide phone field again after reset
+    const phoneFieldContainer = document.getElementById('phoneFieldContainer');
+    const phoneInput = document.getElementById('phone');
+    if (phoneFieldContainer && phoneInput) {
+        phoneFieldContainer.style.display = 'none';
+        phoneInput.required = false;
+    }
 }
 
 function showSuccessMessage(newsletterData) {
