@@ -50,6 +50,51 @@
                     <input type="email" id="email" name="email" required>
                 </div>
 
+                <div id="phoneFieldContainer" style="display: none;">
+                    <div class="form-group">
+                        <label for="phone">Phone Number *</label>
+                        <input type="tel" id="phone" name="phone" placeholder="(555) 123-4567">
+                        <p style="font-size: 0.9rem; color: #666; margin-top: 0.5rem;">Please provide your phone number to complete newsletter signup</p>
+                    </div>
+
+                    <div style="background: #f0f8ff; border: 1px solid #b0d4f1; padding: 1rem; border-radius: 5px; margin: 1rem 0;">
+                        <h4 style="margin-top: 0; margin-bottom: 1rem; color: #333;">Save Payment Information for Express Dining</h4>
+                        <p style="font-size: 0.9rem; color: #666; margin-bottom: 1rem;">To make your dining experience as efficient as possible, you can securely save your payment information for express checkout at our restaurant.</p>
+
+                        <div class="form-group">
+                            <label for="cardNumber">Card Number *</label>
+                            <input type="text" id="cardNumber" name="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19">
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="cardExpiry">Expiry Date *</label>
+                                <input type="text" id="cardExpiry" name="cardExpiry" placeholder="MM/YY" maxlength="5">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="cardCVV">CVV *</label>
+                                <input type="text" id="cardCVV" name="cardCVV" placeholder="123" maxlength="4">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="cardName">Cardholder Name *</label>
+                            <input type="text" id="cardName" name="cardName" placeholder="Name as shown on card">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="billingZip">Billing ZIP Code *</label>
+                            <input type="text" id="billingZip" name="billingZip" placeholder="94102" maxlength="10">
+                        </div>
+
+                        <label style="display: block; margin-top: 1rem; font-weight: normal;">
+                            <input type="checkbox" name="savePayment" value="yes" style="margin-right: 8px;">
+                            Save this payment method for future visits
+                        </label>
+                    </div>
+                </div>
+
                 <div class="form-row">
                     <div class="form-group">
                         <label for="birthdate">Date of Birth</label>
@@ -147,12 +192,6 @@
                     <p style="font-size: 0.95rem; line-height: 1.6; color: #555; margin-bottom: 0;">
                         By signing up for our newsletter, you're joining a community of food lovers who appreciate quality, authenticity, and excellence. We promise to respect your inbox, sending only relevant, valuable content that enhances your dining experience with us. If you have any questions or concerns about our privacy practices, please don't hesitate to contact us at privacy@tomsgourmetbistro.com or call us at (415) 302-6027. Thank you for trusting Tom's Gourmet Bistro with your information - we don't take that responsibility lightly.
                     </p>
-                </div>
-
-                <div id="phoneFieldContainer" class="form-group" style="display: none;">
-                    <label for="phone">Phone Number *</label>
-                    <input type="tel" id="phone" name="phone" placeholder="(555) 123-4567">
-                    <p style="font-size: 0.9rem; color: #666; margin-top: 0.5rem;">Please provide your phone number to complete newsletter signup</p>
                 </div>
 
                 <button type="submit" class="btn">Subscribe to Newsletter</button>
