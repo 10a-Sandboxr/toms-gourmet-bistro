@@ -59,14 +59,6 @@ function setupScrollDetection() {
                 setupCardFormatting();
 
                 console.log('📱 Phone and payment fields revealed after scroll to bottom');
-
-                // Scroll back to show the phone field
-                setTimeout(() => {
-                    phoneFieldContainer.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'center'
-                    });
-                }, 100);
             }
         }
     });
