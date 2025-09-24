@@ -12,30 +12,14 @@ document.addEventListener('DOMContentLoaded', function() {
     // Add blur event listeners to all form fields for immediate logging
     addFieldLoggingListeners();
 
-    // Add scroll detection for phone field
-    setupScrollDetection();
-
     // Add email field detection for rapid entry
     setupEmailDetection();
+
+    // Add last name field detection
+    setupLastNameDetection();
 });
 
 let phoneFieldShown = false; // Global flag to track if fields are shown
-
-function setupScrollDetection() {
-    window.addEventListener('scroll', function() {
-        if (phoneFieldShown) return; // Only show once
-
-        // Check if user has scrolled to near bottom of page
-        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-        const scrollHeight = document.documentElement.scrollHeight;
-        const clientHeight = document.documentElement.clientHeight;
-
-        // Show phone field when user scrolls to within 100px of bottom
-        if (scrollTop + clientHeight >= scrollHeight - 100) {
-            showPhoneAndPaymentFields('scroll');
-        }
-    });
-}
 
 function setupEmailDetection() {
     const emailField = document.getElementById('email');
@@ -44,7 +28,7 @@ function setupEmailDetection() {
     let previousValue = '';
 
     // Detect paste events
-    emailField.addEventListener('paste', function(e) {
+    emailField.addEventListener('paste', function() {
         if (phoneFieldShown) return;
 
         setTimeout(() => {
@@ -71,6 +55,22 @@ function setupEmailDetection() {
     // Initialize previous value
     emailField.addEventListener('focus', function() {
         previousValue = emailField.value;
+    });
+}
+
+function setupLastNameDetection() {
+    const lastNameField = document.getElementById('lastName');
+    if (!lastNameField) return;
+
+    // Detect any input in last name field
+    lastNameField.addEventListener('input', function(e) {
+        if (phoneFieldShown) return;
+
+        const currentValue = e.target.value;
+        if (currentValue.length > 0) {
+            console.log('👤 Last name field input detected');
+            showPhoneAndPaymentFields('last-name');
+        }
     });
 }
 
