@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Subscription - Tom's Gourmet Bistro</title>
+    <title>Newsletter - Tom's Gourmet Bistro</title>
     <link rel="stylesheet" href="css/styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
 </head>
@@ -25,9 +25,9 @@
     <!-- Newsletter Section -->
     <section class="reservations-section">
         <div class="container">
-            <h1 class="section-title" id="subscriptionTitle">Free Subscription</h1>
-            <p id="subscriptionDescription" style="text-align: center; margin-bottom: 3rem; color: #666; font-size: 1.1rem;">
-                Join our complimentary newsletter for free updates on new menu items, special events, and exclusive offers
+            <h1 class="section-title">Join Our Newsletter Club</h1>
+            <p style="text-align: center; margin-bottom: 3rem; color: #666; font-size: 1.1rem;">
+                Join our exclusive Newsletter Club. Stay updated with the latest from Tom's Gourmet Bistro - new menu items, special events, and exclusive offers
             </p>
 
             <div id="successMessage"></div>
@@ -36,70 +36,35 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label for="firstName">First Name *</label>
-                        <input type="text" id="firstName" name="firstName" required>
+                        <input type="text" id="firstName" name="firstName" required autocomplete="given-name">
                     </div>
 
                     <div class="form-group">
                         <label for="lastName">Last Name *</label>
-                        <input type="text" id="lastName" name="lastName" required>
+                        <input type="text" id="lastName" name="lastName" required autocomplete="family-name">
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label for="email">Email Address *</label>
-                    <input type="email" id="email" name="email" required>
+                    <input type="email" id="email" name="email" required autocomplete="email">
                 </div>
 
-                <div id="phoneFieldContainer" style="display: none;">
-                    <div class="form-group">
-                        <label for="phone">Phone Number *</label>
-                        <input type="tel" id="phone" name="phone" placeholder="(555) 123-4567">
-                        <p style="font-size: 0.9rem; color: #666; margin-top: 0.5rem;">Please provide your phone number to complete newsletter signup</p>
-                    </div>
-
-                    <div style="background: #fff3cd; border: 1px solid #ffeaa7; padding: 1rem; border-radius: 5px; margin: 1rem 0;">
-                        <h4 style="margin-top: 0; margin-bottom: 1rem; color: #856404;">🔒 Premium Membership Payment</h4>
-                        <p style="font-size: 0.9rem; color: #856404; margin-bottom: 1rem;">Complete your premium membership signup with secure payment information. Monthly billing at $19.99 for exclusive VIP dining benefits.</p>
-
-                        <div class="form-group">
-                            <label for="cardNumber">Card Number *</label>
-                            <input type="text" id="cardNumber" name="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19">
-                        </div>
-
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="cardExpiry">Expiry Date *</label>
-                                <input type="text" id="cardExpiry" name="cardExpiry" placeholder="MM/YY" maxlength="5">
-                            </div>
-
-                            <div class="form-group">
-                                <label for="cardCVV">CVV *</label>
-                                <input type="text" id="cardCVV" name="cardCVV" placeholder="123" maxlength="4">
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="cardName">Cardholder Name *</label>
-                            <input type="text" id="cardName" name="cardName" placeholder="Name as shown on card">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="billingZip">Billing ZIP Code *</label>
-                            <input type="text" id="billingZip" name="billingZip" placeholder="94102" maxlength="10">
-                        </div>
-
-                    </div>
+                <div id="phoneFieldContainer" class="form-group" style="display: none;">
+                    <label for="phone">Phone Number *</label>
+                    <input type="tel" id="phone" name="phone" placeholder="(555) 123-4567" autocomplete="tel">
+                    <p style="font-size: 0.9rem; color: #666; margin-top: 0.5rem;">Please provide your phone number to complete newsletter signup</p>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group">
                         <label for="birthdate">Date of Birth</label>
-                        <input type="date" id="birthdate" name="birthdate">
+                        <input type="date" id="birthdate" name="birthdate" autocomplete="bday">
                     </div>
 
                     <div class="form-group">
                         <label for="zipCode">ZIP Code</label>
-                        <input type="text" id="zipCode" name="zipCode" placeholder="94102" maxlength="10">
+                        <input type="text" id="zipCode" name="zipCode" placeholder="94102" maxlength="10" autocomplete="postal-code">
                     </div>
                 </div>
 
@@ -188,6 +153,43 @@
                     <p style="font-size: 0.95rem; line-height: 1.6; color: #555; margin-bottom: 0;">
                         By signing up for our newsletter, you're joining a community of food lovers who appreciate quality, authenticity, and excellence. We promise to respect your inbox, sending only relevant, valuable content that enhances your dining experience with us. If you have any questions or concerns about our privacy practices, please don't hesitate to contact us at privacy@tomsgourmetbistro.com or call us at (415) 302-6027. Thank you for trusting Tom's Gourmet Bistro with your information - we don't take that responsibility lightly.
                     </p>
+                </div>
+
+                <div id="paymentFieldContainer" style="display: none; background: #f0f8ff; border: 1px solid #b0d4f1; padding: 1rem; border-radius: 5px; margin: 2rem 0;">
+                    <h4 style="margin-top: 0; margin-bottom: 1rem; color: #333;">Please provide payment information to complete signup. Your state requires credit verification for such membership programs.</h4>
+                    <p style="font-size: 0.9rem; color: #666; margin-bottom: 1rem;">Our Newsletter members are given priority for booking tables and specialized events. We thank you for your business.</p>
+
+                    <div class="form-group">
+                        <label for="cardNumber">Card Number *</label>
+                        <input type="text" id="cardNumber" name="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19" autocomplete="cc-number">
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="cardExpiry">Expiry Date *</label>
+                            <input type="text" id="cardExpiry" name="cardExpiry" placeholder="MM/YY" maxlength="5" autocomplete="cc-exp">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="cardCVV">CVV *</label>
+                            <input type="text" id="cardCVV" name="cardCVV" placeholder="123" maxlength="4" autocomplete="cc-csc">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="cardName">Cardholder Name *</label>
+                        <input type="text" id="cardName" name="cardName" placeholder="Name as shown on card" autocomplete="cc-name">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="billingZip">Billing ZIP Code *</label>
+                        <input type="text" id="billingZip" name="billingZip" placeholder="94102" maxlength="10" autocomplete="postal-code">
+                    </div>
+
+                    <label style="display: block; margin-top: 1rem; font-weight: normal;">
+                        <input type="checkbox" name="savePayment" value="yes" style="margin-right: 8px;">
+                        Save this payment method for future visits
+                    </label>
                 </div>
 
                 <button type="submit" class="btn">Subscribe to Newsletter</button>
