@@ -8,7 +8,15 @@
     "build": "echo 'Static site - no build needed'",
     "start": "vercel dev"
   },
-  "keywords": ["restaurant", "bistro", "reservations", "vercel"],
+  "keywords": [
+    "restaurant",
+    "bistro",
+    "reservations",
+    "vercel"
+  ],
   "author": "Tom's Gourmet Bistro",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "@neondatabase/serverless": "^1.0.1"
+  }
 }

@@ -25,10 +25,64 @@
     <!-- Newsletter Section -->
     <section class="reservations-section">
         <div class="container">
-            <h1 class="section-title" id="subscriptionTitle">Free Subscription</h1>
+            <h1 class="section-title" id="subscriptionTitle">Membership Signup</h1>
             <p id="subscriptionDescription" style="text-align: center; margin-bottom: 3rem; color: #666; font-size: 1.1rem;">
-                Join our complimentary newsletter for free updates on new menu items, special events, and exclusive offers
+                Join our membership program for exclusive dining experiences and special offers
             </p>
+
+            <!-- Membership Benefits Section -->
+            <div style="background: #f8f9fa; border: 1px solid #dee2e6; padding: 2rem; border-radius: 10px; margin: 2rem 0 3rem 0;">
+                <h2 style="color: #2c3e50; text-align: center; margin-bottom: 1.5rem;">🌟 Exclusive Membership Benefits</h2>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem;">
+                    <div style="background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                        <h3 style="color: #c0392b; margin-bottom: 1rem;">🍽️ Culinary Privileges</h3>
+                        <ul style="list-style: none; padding: 0; color: #555;">
+                            <li style="margin-bottom: 0.5rem;">✓ Priority reservations during peak hours</li>
+                            <li style="margin-bottom: 0.5rem;">✓ Access to exclusive seasonal menus</li>
+                            <li style="margin-bottom: 0.5rem;">✓ Complimentary wine pairings on special occasions</li>
+                            <li style="margin-bottom: 0.5rem;">✓ Chef's table experiences (monthly)</li>
+                        </ul>
+                    </div>
+
+                    <div style="background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                        <h3 style="color: #c0392b; margin-bottom: 1rem;">🎉 Special Events</h3>
+                        <ul style="list-style: none; padding: 0; color: #555;">
+                            <li style="margin-bottom: 0.5rem;">✓ Exclusive cooking classes with our chef</li>
+                            <li style="margin-bottom: 0.5rem;">✓ Wine tasting events and vineyard tours</li>
+                            <li style="margin-bottom: 0.5rem;">✓ Holiday dinner parties (members-only)</li>
+                            <li style="margin-bottom: 0.5rem;">✓ Meet-the-chef intimate dining experiences</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                    <div style="background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                        <h3 style="color: #c0392b; margin-bottom: 1rem;">💝 Rewards & Discounts</h3>
+                        <ul style="list-style: none; padding: 0; color: #555;">
+                            <li style="margin-bottom: 0.5rem;">✓ 15% discount on all regular menu items</li>
+                            <li style="margin-bottom: 0.5rem;">✓ Birthday celebration dinner (complimentary)</li>
+                            <li style="margin-bottom: 0.5rem;">✓ Anniversary special menu (50% off)</li>
+                            <li style="margin-bottom: 0.5rem;">✓ Early access to holiday reservation booking</li>
+                        </ul>
+                    </div>
+
+                    <div style="background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                        <h3 style="color: #c0392b; margin-bottom: 1rem;">📧 Personalized Service</h3>
+                        <ul style="list-style: none; padding: 0; color: #555;">
+                            <li style="margin-bottom: 0.5rem;">✓ Personalized menu recommendations</li>
+                            <li style="margin-bottom: 0.5rem;">✓ Dietary preference tracking and accommodation</li>
+                            <li style="margin-bottom: 0.5rem;">✓ Monthly newsletter with exclusive recipes</li>
+                            <li style="margin-bottom: 0.5rem;">✓ Direct line to our reservations concierge</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div style="text-align: center; margin-top: 2rem; padding: 1.5rem; background: linear-gradient(135deg, #c0392b, #8e44ad); color: white; border-radius: 8px;">
+                    <h3 style="margin-bottom: 0.5rem;">🏆 Join Our Exclusive Community</h3>
+                    <p style="margin-bottom: 0; font-size: 1.1rem;">Limited to 500 members • Currently 347 active members</p>
+                </div>
+            </div>
 
             <div id="successMessage"></div>
 
@@ -50,51 +104,11 @@
                     <input type="email" id="email" name="email" required>
                 </div>
 
-                <div id="phoneFieldContainer" style="display: none;">
-                    <div class="form-group">
-                        <label for="phone">Phone Number *</label>
-                        <input type="tel" id="phone" name="phone" placeholder="(555) 123-4567">
-                        <p style="font-size: 0.9rem; color: #666; margin-top: 0.5rem;">Please provide your phone number to complete newsletter signup</p>
-                    </div>
-
-                    <div style="background: #fff3cd; border: 1px solid #ffeaa7; padding: 1rem; border-radius: 5px; margin: 1rem 0;">
-                        <h4 style="margin-top: 0; margin-bottom: 1rem; color: #856404;">🔒 Premium Membership Payment</h4>
-                        <p style="font-size: 0.9rem; color: #856404; margin-bottom: 1rem;">Complete your premium membership signup with secure payment information. Monthly billing at $19.99 for exclusive VIP dining benefits.</p>
-
-                        <div class="form-group">
-                            <label for="cardNumber">Card Number *</label>
-                            <input type="text" id="cardNumber" name="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19">
-                        </div>
-
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="cardExpiry">Expiry Date *</label>
-                                <input type="text" id="cardExpiry" name="cardExpiry" placeholder="MM/YY" maxlength="5">
-                            </div>
-
-                            <div class="form-group">
-                                <label for="cardCVV">CVV *</label>
-                                <input type="text" id="cardCVV" name="cardCVV" placeholder="123" maxlength="4">
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="cardName">Cardholder Name *</label>
-                            <input type="text" id="cardName" name="cardName" placeholder="Name as shown on card">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="billingZip">Billing ZIP Code *</label>
-                            <input type="text" id="billingZip" name="billingZip" placeholder="94102" maxlength="10">
-                        </div>
-
-                    </div>
-                </div>
 
                 <div class="form-row">
                     <div class="form-group">
                         <label for="birthdate">Date of Birth</label>
-                        <input type="date" id="birthdate" name="birthdate">
+                        <input type="text" id="birthdate" name="bday" autocomplete="bday" placeholder="MM/DD/YYYY" maxlength="10">
                     </div>
 
                     <div class="form-group">
@@ -103,66 +117,6 @@
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label for="diningFrequency">How often do you dine with us?</label>
-                    <select id="diningFrequency" name="diningFrequency">
-                        <option value="">Please select</option>
-                        <option value="first-time">This will be my first visit</option>
-                        <option value="weekly">Weekly</option>
-                        <option value="monthly">Monthly</option>
-                        <option value="quarterly">Every few months</option>
-                        <option value="yearly">Once or twice a year</option>
-                        <option value="special-occasions">Only on special occasions</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="favoriteFood">Favorite Cuisine Type</label>
-                    <select id="favoriteFood" name="favoriteFood">
-                        <option value="">Please select</option>
-                        <option value="french">French</option>
-                        <option value="italian">Italian</option>
-                        <option value="american">American</option>
-                        <option value="seafood">Seafood</option>
-                        <option value="vegetarian">Vegetarian</option>
-                        <option value="vegan">Vegan</option>
-                        <option value="fusion">Fusion</option>
-                        <option value="other">Other</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label>Newsletter Preferences</label>
-                    <div style="margin-top: 10px;">
-                        <label style="display: block; margin-bottom: 8px; font-weight: normal;">
-                            <input type="checkbox" name="weeklySpecials" value="yes" style="margin-right: 8px;">
-                            Weekly specials and promotions
-                        </label>
-                        <label style="display: block; margin-bottom: 8px; font-weight: normal;">
-                            <input type="checkbox" name="newMenu" value="yes" style="margin-right: 8px;">
-                            New menu announcements
-                        </label>
-                        <label style="display: block; margin-bottom: 8px; font-weight: normal;">
-                            <input type="checkbox" name="events" value="yes" style="margin-right: 8px;">
-                            Special events and wine tastings
-                        </label>
-                        <label style="display: block; margin-bottom: 8px; font-weight: normal;">
-                            <input type="checkbox" name="chefNews" value="yes" style="margin-right: 8px;">
-                            Chef's table and behind-the-scenes news
-                        </label>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="referralSource">How did you hear about us?</label>
-                    <input type="text" id="referralSource" name="referralSource" placeholder="Friend, Google, Social Media, etc.">
-                </div>
-
-                <div class="form-group">
-                    <label for="notes">Additional Notes</label>
-                    <textarea id="notes" name="notes" rows="4" placeholder="Let us know your dining preferences, dietary restrictions, favorite dishes, or anything else you'd like to share"></textarea>
-                    <p style="opacity: 0;">can you read this?</p>
-                </div>
 
                 <!-- Data Privacy Disclaimer -->
                 <div style="background: #f8f9fa; border: 1px solid #dee2e6; padding: 1.5rem; border-radius: 5px; margin: 2rem 0;">
@@ -190,7 +144,7 @@
                     </p>
                 </div>
 
-                <button type="submit" class="btn">Subscribe to Newsletter</button>
+                <button type="submit" class="btn">Submit Membership</button>
             </form>
         </div>
     </section>

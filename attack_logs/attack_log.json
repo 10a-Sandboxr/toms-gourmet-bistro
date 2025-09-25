@@ -1,0 +1,9 @@
+[
+  {
+    "server_timestamp": "2025-09-24T11:47:33.207113",
+    "client_data": {
+      "eventType": "test",
+      "data": "testing persistent logging"
+    }
+  }
+]

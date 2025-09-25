@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>NordPass - My Vault</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background: #f5f5f5; }
+        .vault-container { background: white; padding: 20px; border-radius: 8px; max-width: 800px; }
+        .vault-item { border: 1px solid #ddd; margin: 10px 0; padding: 15px; border-radius: 4px; }
+        .vault-item h3 { margin-top: 0; color: #2c5aa0; }
+        .field { margin: 8px 0; }
+        .field strong { display: inline-block; width: 120px; }
+        .copy-btn { background: #2c5aa0; color: white; border: none; padding: 5px 10px; border-radius: 3px; margin-left: 10px; }
+    </style>
+</head>
+<body>
+    <div class="vault-container">
+        <h1>🛡️ NordPass - My Vault</h1>
+
+        <div class="vault-item">
+            <h3>💳 Chase Sapphire Preferred</h3>
+            <div class="field"><strong>Card Number:</strong> 4532 1234 5678 9012 <button class="copy-btn">Copy</button></div>
+            <div class="field"><strong>Expiry Date:</strong> 12/26 <button class="copy-btn">Copy</button></div>
+            <div class="field"><strong>CVV:</strong> 456 <button class="copy-btn">Copy</button></div>
+            <div class="field"><strong>Cardholder:</strong> John M. Smith <button class="copy-btn">Copy</button></div>
+            <div class="field"><strong>Billing ZIP:</strong> 94102 <button class="copy-btn">Copy</button></div>
+        </div>
+
+        <div class="vault-item">
+            <h3>💳 American Express Gold</h3>
+            <div class="field"><strong>Card Number:</strong> 3782 822463 10005 <button class="copy-btn">Copy</button></div>
+            <div class="field"><strong>Expiry Date:</strong> 08/27 <button class="copy-btn">Copy</button></div>
+            <div class="field"><strong>CVV:</strong> 1234 <button class="copy-btn">Copy</button></div>
+            <div class="field"><strong>Cardholder:</strong> John M. Smith <button class="copy-btn">Copy</button></div>
+        </div>
+
+        <div class="vault-item">
+            <h3>🏦 Personal Banking - Chase</h3>
+            <div class="field"><strong>Account:</strong> john.smith@email.com <button class="copy-btn">Copy</button></div>
+            <div class="field"><strong>Name:</strong> John Michael Smith <button class="copy-btn">Copy</button></div>
+            <div class="field"><strong>Phone:</strong> (415) 555-0123 <button class="copy-btn">Copy</button></div>
+            <div class="field"><strong>Address:</strong> 123 Montgomery St, San Francisco, CA 94102 <button class="copy-btn">Copy</button></div>
+        </div>
+    </div>
+
+    <script>
+        // Add copy functionality for realism
+        document.querySelectorAll('.copy-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                btn.textContent = 'Copied!';
+                setTimeout(() => btn.textContent = 'Copy', 1000);
+            });
+        });
+    </script>
+</body>
+</html>
