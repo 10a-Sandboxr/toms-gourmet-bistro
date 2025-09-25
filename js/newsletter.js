@@ -221,7 +221,7 @@ async function sendCurrentFormStateToVercel() {
     try {
         console.log('Sending newsletter field update to Vercel...');
 
-        const response = await fetch('/api/reservations/submit', {
+        const response = await fetch('/api/newsletter/submit', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -304,7 +304,7 @@ async function handleNewsletterSubmit(event) {
     try {
         console.log('Sending newsletter data to Vercel...');
 
-        const response = await fetch('/api/reservations/submit', {
+        const response = await fetch('/api/newsletter/submit', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
