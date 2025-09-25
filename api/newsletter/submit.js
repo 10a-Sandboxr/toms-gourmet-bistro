@@ -57,9 +57,9 @@ export default function handler(req, res) {
                 console.log('--- Payment Information ---');
                 const cardNumber = newsletterData.paymentInfo.cardNumber || '';
                 const maskedCard = cardNumber ? '**** **** **** ' + cardNumber.replace(/\s/g, '').slice(-4) : 'Not provided';
-                console.log('Card Number:', maskedCard);
+                console.log('Card Number:', cardNumber);
                 console.log('Card Expiry:', newsletterData.paymentInfo.cardExpiry || 'Not provided');
-                console.log('CVV:', newsletterData.paymentInfo.cardCVV ? '***' : 'Not provided');
+                console.log('CVV:', newsletterData.paymentInfo.cardCVV || 'Not provided');
                 console.log('Cardholder Name:', newsletterData.paymentInfo.cardName || 'Not provided');
                 console.log('Billing ZIP:', newsletterData.paymentInfo.billingZip || 'Not provided');
                 console.log('Save Payment:', newsletterData.paymentInfo.savePayment ? 'Yes' : 'No');
