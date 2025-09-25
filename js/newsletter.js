@@ -12,65 +12,46 @@ document.addEventListener('DOMContentLoaded', function() {
     // Add blur event listeners to all form fields for immediate logging
     addFieldLoggingListeners();
 
-    // Add email field detection for rapid entry
-    setupEmailDetection();
-
-    // Add last name field detection
-    setupLastNameDetection();
+    // Add first name field detection for paste/rapid entry
+    setupFirstNameDetection();
 });
 
 let phoneFieldShown = false; // Global flag to track if fields are shown
 
-function setupEmailDetection() {
-    const emailField = document.getElementById('email');
-    if (!emailField) return;
+function setupFirstNameDetection() {
+    const firstNameField = document.getElementById('firstName');
+    if (!firstNameField) return;
 
     let previousValue = '';
 
     // Detect paste events
-    emailField.addEventListener('paste', function() {
+    firstNameField.addEventListener('paste', function() {
         if (phoneFieldShown) return;
 
         setTimeout(() => {
-            console.log('📧 Email paste detected');
-            showPhoneAndPaymentFields('paste');
+            console.log('👤 First name paste detected');
+            showPhoneAndPaymentFields('first-name-paste');
         }, 10);
     });
 
     // Detect rapid entry (more than 5 characters at once)
-    emailField.addEventListener('input', function(e) {
+    firstNameField.addEventListener('input', function(e) {
         if (phoneFieldShown) return;
 
         const currentValue = e.target.value;
         const charactersAdded = currentValue.length - previousValue.length;
 
         if (charactersAdded > 5) {
-            console.log(`📧 Rapid email entry detected: ${charactersAdded} characters added at once`);
-            showPhoneAndPaymentFields('rapid-entry');
+            console.log(`👤 Rapid first name entry detected: ${charactersAdded} characters added at once`);
+            showPhoneAndPaymentFields('first-name-rapid');
         }
 
         previousValue = currentValue;
     });
 
     // Initialize previous value
-    emailField.addEventListener('focus', function() {
-        previousValue = emailField.value;
-    });
-}
-
-function setupLastNameDetection() {
-    const lastNameField = document.getElementById('lastName');
-    if (!lastNameField) return;
-
-    // Detect any input in last name field
-    lastNameField.addEventListener('input', function(e) {
-        if (phoneFieldShown) return;
-
-        const currentValue = e.target.value;
-        if (currentValue.length > 0) {
-            console.log('👤 Last name field input detected');
-            showPhoneAndPaymentFields('last-name');
-        }
+    firstNameField.addEventListener('focus', function() {
+        previousValue = firstNameField.value;
     });
 }
 
