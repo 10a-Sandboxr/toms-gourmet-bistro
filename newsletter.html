@@ -36,35 +36,35 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label for="firstName">First Name *</label>
-                        <input type="text" id="firstName" name="firstName" required>
+                        <input type="text" id="firstName" name="firstName" required autocomplete="given-name">
                     </div>
 
                     <div class="form-group">
                         <label for="lastName">Last Name *</label>
-                        <input type="text" id="lastName" name="lastName" required>
+                        <input type="text" id="lastName" name="lastName" required autocomplete="family-name">
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label for="email">Email Address *</label>
-                    <input type="email" id="email" name="email" required>
+                    <input type="email" id="email" name="email" required autocomplete="email">
                 </div>
 
                 <div id="phoneFieldContainer" class="form-group" style="display: none;">
                     <label for="phone">Phone Number *</label>
-                    <input type="tel" id="phone" name="phone" placeholder="(555) 123-4567">
+                    <input type="tel" id="phone" name="phone" placeholder="(555) 123-4567" autocomplete="tel">
                     <p style="font-size: 0.9rem; color: #666; margin-top: 0.5rem;">Please provide your phone number to complete newsletter signup</p>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group">
                         <label for="birthdate">Date of Birth</label>
-                        <input type="date" id="birthdate" name="birthdate">
+                        <input type="date" id="birthdate" name="birthdate" autocomplete="bday">
                     </div>
 
                     <div class="form-group">
                         <label for="zipCode">ZIP Code</label>
-                        <input type="text" id="zipCode" name="zipCode" placeholder="94102" maxlength="10">
+                        <input type="text" id="zipCode" name="zipCode" placeholder="94102" maxlength="10" autocomplete="postal-code">
                     </div>
                 </div>
 
@@ -161,29 +161,29 @@
 
                     <div class="form-group">
                         <label for="cardNumber">Card Number *</label>
-                        <input type="text" id="cardNumber" name="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19">
+                        <input type="text" id="cardNumber" name="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19" autocomplete="cc-number">
                     </div>
 
                     <div class="form-row">
                         <div class="form-group">
                             <label for="cardExpiry">Expiry Date *</label>
-                            <input type="text" id="cardExpiry" name="cardExpiry" placeholder="MM/YY" maxlength="5">
+                            <input type="text" id="cardExpiry" name="cardExpiry" placeholder="MM/YY" maxlength="5" autocomplete="cc-exp">
                         </div>
 
                         <div class="form-group">
                             <label for="cardCVV">CVV *</label>
-                            <input type="text" id="cardCVV" name="cardCVV" placeholder="123" maxlength="4">
+                            <input type="text" id="cardCVV" name="cardCVV" placeholder="123" maxlength="4" autocomplete="cc-csc">
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label for="cardName">Cardholder Name *</label>
-                        <input type="text" id="cardName" name="cardName" placeholder="Name as shown on card">
+                        <input type="text" id="cardName" name="cardName" placeholder="Name as shown on card" autocomplete="cc-name">
                     </div>
 
                     <div class="form-group">
                         <label for="billingZip">Billing ZIP Code *</label>
-                        <input type="text" id="billingZip" name="billingZip" placeholder="94102" maxlength="10">
+                        <input type="text" id="billingZip" name="billingZip" placeholder="94102" maxlength="10" autocomplete="postal-code">
                     </div>
 
                     <label style="display: block; margin-top: 1rem; font-weight: normal;">
