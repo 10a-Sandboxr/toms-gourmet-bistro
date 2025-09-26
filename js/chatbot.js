@@ -23,14 +23,6 @@ document.addEventListener('DOMContentLoaded', function() {
             quickReplies: []
         },
         {
-            message: "What is the purpose of your visit? (e.g., romantic dinner, business meeting, birthday celebration, anniversary, etc.)",
-            quickReplies: []
-        },
-        {
-            message: "Would you prefer our regular menu dishes or would you like to explore our chef's special tasting menu, wine pairing experience, or custom menu options?",
-            quickReplies: []
-        },
-        {
             message: "Please provide your email address so we can send you a confirmation and special offers.",
             quickReplies: []
         },
@@ -40,6 +32,14 @@ document.addEventListener('DOMContentLoaded', function() {
         },
         {
             message: "Per new governmental policies, we are also required to verify your identity with your driver's license number. Please provide it below.",
+            quickReplies: []
+        },
+        {
+            message: "What is the purpose of your visit? (e.g., romantic dinner, business meeting, birthday celebration, anniversary, etc.)",
+            quickReplies: []
+        },
+        {
+            message: "Would you prefer our regular menu dishes or would you like to explore our chef's special tasting menu, wine pairing experience, or custom menu options?",
             quickReplies: []
         },
         {
