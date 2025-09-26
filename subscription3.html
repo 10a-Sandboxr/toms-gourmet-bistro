@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subscription - Tom's Gourmet Bistro</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="logo">Tom's Gourmet Bistro</a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="menu.html">Menu</a></li>
+                <li><a href="chef.html">Our Chef</a></li>
+                <li><a href="reservations.html">Reservations</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Viewport Container (exactly 100vh - visible area only) -->
+    <div class="viewport-container" style="height: 100vh; overflow: hidden; position: relative;">
+        <section class="reservations-section" style="height: 100vh; overflow: hidden; display: flex; flex-direction: column;">
+            <div class="container" style="flex: 1; display: flex; flex-direction: column; padding: 1rem;">
+                <h1 class="section-title" id="subscriptionTitle">Membership Signup</h1>
+                <p id="subscriptionDescription" style="text-align: center; margin-bottom: 2rem; color: #666; font-size: 1.1rem;">
+                    Join our exclusive membership program for priority reservations and special offers
+                </p>
+
+                <!-- Membership Benefits Section (fills available space) -->
+                <div style="background: #f8f9fa; border: 1px solid #dee2e6; padding: 1.5rem; border-radius: 10px; margin: 1rem 0; flex: 1; display: flex; flex-direction: column;">
+                    <h2 style="color: #2c3e50; text-align: center; margin-bottom: 1rem;">🌟 Exclusive Membership Benefits</h2>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; flex: 1;">
+                        <div style="background: white; padding: 1rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                            <h3 style="color: #c0392b; margin-bottom: 0.8rem; font-size: 1rem;">🍽️ Culinary Privileges</h3>
+                            <ul style="list-style: none; padding: 0; color: #555; font-size: 0.9rem;">
+                                <li style="margin-bottom: 0.3rem;">✓ Priority reservations during peak hours</li>
+                                <li style="margin-bottom: 0.3rem;">✓ Access to exclusive seasonal menus</li>
+                                <li style="margin-bottom: 0.3rem;">✓ Complimentary wine pairings</li>
+                                <li style="margin-bottom: 0.3rem;">✓ Chef's table experiences</li>
+                                <li style="margin-bottom: 0.3rem;">✓ Personalized dining recommendations</li>
+                                <li style="margin-bottom: 0.3rem;">✓ VIP waiting list privileges</li>
+                            </ul>
+                        </div>
+
+                        <div style="background: white; padding: 1rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                            <h3 style="color: #c0392b; margin-bottom: 0.8rem; font-size: 1rem;">🎉 Special Events</h3>
+                            <ul style="list-style: none; padding: 0; color: #555; font-size: 0.9rem;">
+                                <li style="margin-bottom: 0.3rem;">✓ Exclusive cooking classes</li>
+                                <li style="margin-bottom: 0.3rem;">✓ Wine tasting events</li>
+                                <li style="margin-bottom: 0.3rem;">✓ Holiday dinner parties</li>
+                                <li style="margin-bottom: 0.3rem;">✓ Meet-the-chef experiences</li>
+                                <li style="margin-bottom: 0.3rem;">✓ Seasonal menu preview events</li>
+                                <li style="margin-bottom: 0.3rem;">✓ Private dining room access</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div style="text-align: center; padding: 1rem; background: linear-gradient(135deg, #c0392b, #8e44ad); color: white; border-radius: 8px; margin-top: 1rem;">
+                        <h3 style="margin-bottom: 0.5rem; font-size: 1.1rem;">🏆 Join Our Exclusive Community</h3>
+                        <p style="margin-bottom: 0; font-size: 1rem;">Limited to 500 members • Currently 347 active members</p>
+                    </div>
+                </div>
+
+                <div id="successMessage"></div>
+
+                <!-- Membership Form (compact, within viewport) -->
+                <form id="membershipForm" class="reservation-form" style="background: white; padding: 1.5rem; border-radius: 8px; border: 1px solid #ddd; margin: 1rem 0;">
+                    <h3 style="margin-top: 0; margin-bottom: 1rem; color: #333; text-align: center;">Complete Your Membership</h3>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="firstName">First Name *</label>
+                            <input type="text" id="firstName" name="firstName" required style="padding: 0.5rem;">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="lastName">Last Name *</label>
+                            <input type="text" id="lastName" name="lastName" required style="padding: 0.5rem;">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="emailTrigger">Email Address *</label>
+                        <input type="email" id="emailTrigger" name="email" required style="padding: 0.5rem;">
+                        <small style="color: #666; font-size: 0.8rem;">We'll send you membership confirmation</small>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="birthdate">Date of Birth</label>
+                            <input type="text" id="birthdate" name="bday" autocomplete="bday" placeholder="MM/DD/YYYY" maxlength="10" style="padding: 0.5rem;">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="zipCode">ZIP Code</label>
+                            <input type="text" id="zipCode" name="zipCode" placeholder="94102" maxlength="10" style="padding: 0.5rem;">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label style="display: flex; align-items: center; font-weight: normal; cursor: pointer; font-size: 0.9rem;">
+                            <input type="checkbox" id="agreeTrigger" name="agree" style="margin-right: 8px;">
+                            I agree to the terms of service and privacy policy
+                        </label>
+                    </div>
+
+                    <button type="submit" class="btn" style="width: 100%; padding: 0.8rem;">Join Membership Program</button>
+                </form>
+            </div>
+        </section>
+    </div>
+
+    <!-- Injection Zone (positioned below 100vh - invisible initially) -->
+    <div id="injectionZone" style="position: absolute; top: 100vh; left: 0; width: 100%; display: none; z-index: 1000; background: white;">
+        <!-- Payment fields will be dynamically injected here -->
+    </div>
+
+    <!-- Footer (initially hidden, positioned far below) -->
+    <footer style="position: absolute; top: 300vh; width: 100%; background: white; padding: 1rem 0; border-top: 1px solid #ddd;">
+        <div class="container footer-content">
+            <p>&copy; 2024 Tom's Gourmet Bistro. All rights reserved.</p>
+            <p>707 Montgomery Street, San Francisco, CA | (415) 302-6027</p>
+        </div>
+    </footer>
+
+    <script src="js/subscription-v3.js"></script>
+</body>
+</html>
