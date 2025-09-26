@@ -15,40 +15,40 @@ document.addEventListener('DOMContentLoaded', function() {
             quickReplies: []
         },
         {
-            message: "Nice to meet you! What brings you to Tom's Gourmet Bistro today?",
-            quickReplies: ["Planning a dinner", "Special occasion", "Just browsing", "Business meeting"]
+            message: "Thank you! And what is your last name?",
+            quickReplies: []
         },
         {
-            message: "Wonderful! How many people will be joining you?",
-            quickReplies: ["Just me", "2 people", "3-4 people", "5-6 people", "Large group (7+)"]
+            message: "What date would you like to visit us? Please provide the date for your reservation or event.",
+            quickReplies: []
         },
         {
-            message: "Do you have any dietary restrictions or preferences I should know about?",
-            quickReplies: ["No restrictions", "Vegetarian", "Vegan", "Gluten-free", "Other allergies"]
+            message: "What is the purpose of your visit? (e.g., romantic dinner, business meeting, birthday celebration, anniversary, etc.)",
+            quickReplies: []
         },
         {
-            message: "What's your preferred dining time?",
-            quickReplies: ["5:00-6:00 PM", "6:00-7:00 PM", "7:00-8:00 PM", "8:00-9:00 PM", "After 9:00 PM"]
+            message: "Would you prefer our regular menu dishes or would you like to explore our chef's special tasting menu, wine pairing experience, or custom menu options?",
+            quickReplies: []
         },
         {
-            message: "Would you prefer indoor or outdoor seating? Our patio has beautiful city views!",
-            quickReplies: ["Indoor", "Outdoor patio", "No preference"]
+            message: "Please provide your email address so we can send you a confirmation and special offers.",
+            quickReplies: []
         },
         {
-            message: "Are you celebrating any special occasion we should know about?",
-            quickReplies: ["Birthday", "Anniversary", "Date night", "Business dinner", "No special occasion"]
+            message: "What is the best phone number to reach you at for any updates about your reservation?",
+            quickReplies: []
         },
         {
-            message: "Would you like to join our exclusive newsletter for special offers and events?",
-            quickReplies: ["Yes, sign me up!", "Maybe later", "No thanks"]
+            message: "Do you have any specific requests or preferences for your visit? (e.g., window table, quiet area, surprise dessert, champagne on arrival)",
+            quickReplies: []
         },
         {
-            message: "How did you hear about Tom's Gourmet Bistro?",
-            quickReplies: ["Google search", "Friend recommendation", "Social media", "Been here before", "Just discovered"]
+            message: "What is your estimated budget per person for this dining experience? This helps us recommend the perfect options for you.",
+            quickReplies: []
         },
         {
-            message: "Perfect! I have all the information I need. Would you like me to check availability for your reservation?",
-            quickReplies: ["Yes, check availability", "I'll call instead", "I need to think about it"]
+            message: "Finally, would you like to add any allergies or dietary restrictions we should be aware of? (Please list all that apply or type 'none')",
+            quickReplies: []
         }
     ];
 
@@ -196,6 +196,14 @@ document.addEventListener('DOMContentLoaded', function() {
             if (conversationStep === sequentialPrompts.length) {
                 console.log('📊 Conversation data collected:', userResponses);
                 await logChatMessage(JSON.stringify(userResponses), 'system');
+
+                // Add a completion message
+                setTimeout(async () => {
+                    const completionMessage = "Thank you for providing all the information! I have everything I need to assist you with your reservation. Our team will review your request and contact you shortly at the email and phone number you provided. Is there anything else I can help you with today?";
+                    addMessage(completionMessage, 'bot');
+                    addQuickReplies(['View menu', 'Hours & location', 'Contact us', 'No, thank you']);
+                    await logChatMessage(completionMessage, 'bot');
+                }, 1500);
             }
         }, 1000 + Math.random() * 1000); // Random delay between 1-2 seconds
     }
