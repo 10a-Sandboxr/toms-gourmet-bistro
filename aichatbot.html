@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Assistant - Tom's Gourmet Bistro</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/chatbot.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="logo">Tom's Gourmet Bistro</a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="menu.html">Menu</a></li>
+                <li><a href="chef.html">Our Chef</a></li>
+                <li><a href="reservations.html">Reservations</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Chatbot Section -->
+    <section class="chatbot-section">
+        <div class="container">
+            <h1 class="section-title">Tom's AI Assistant</h1>
+            <p style="text-align: center; margin-bottom: 2rem; color: #666; font-size: 1.1rem;">
+                Get instant help with reservations, menu questions, and more from our AI-powered assistant
+            </p>
+
+            <div class="chat-container">
+                <div class="chat-header">
+                    <div class="chat-status">
+                        <span class="status-indicator"></span>
+                        <span>Tom's Assistant</span>
+                    </div>
+                    <span class="chat-subtitle">Always here to help</span>
+                </div>
+
+                <div class="chat-messages" id="chatMessages">
+                    <div class="message bot-message">
+                        <div class="message-avatar">🤖</div>
+                        <div class="message-content">
+                            <p>Welcome to Tom's Gourmet Bistro! I'm your AI assistant. How can I help you today?</p>
+                            <div class="quick-replies">
+                                <button class="quick-reply-btn" data-message="Make a reservation">Make a reservation</button>
+                                <button class="quick-reply-btn" data-message="View menu">View menu</button>
+                                <button class="quick-reply-btn" data-message="Hours & location">Hours & location</button>
+                                <button class="quick-reply-btn" data-message="Special dietary options">Special dietary options</button>
+                                <button class="quick-reply-btn" data-message="Special events">Special events</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chat-input-container">
+                    <form id="chatForm" class="chat-form">
+                        <input
+                            type="text"
+                            id="chatInput"
+                            class="chat-input"
+                            placeholder="Type your message here..."
+                            autocomplete="off"
+                            required
+                        >
+                        <button type="submit" class="send-button">
+                            <span>Send</span>
+                        </button>
+                    </form>
+                    <!-- <p class="chat-disclaimer">Your messages are logged to improve our service</p> -->
+                </div>
+            </div>
+
+            <div class="chatbot-features">
+                <h2>What Our AI Assistant Can Help With:</h2>
+                <div class="features-grid">
+                    <div class="feature-item">
+                        <span class="feature-icon">📅</span>
+                        <h3>Reservations</h3>
+                        <p>Check availability and make table reservations</p>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">🍽️</span>
+                        <h3>Menu Information</h3>
+                        <p>Get details about dishes, ingredients, and pricing</p>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">🌿</span>
+                        <h3>Dietary Needs</h3>
+                        <p>Find options for allergies and dietary restrictions</p>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">🎉</span>
+                        <h3>Special Events</h3>
+                        <p>Learn about private dining and special occasions</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container footer-content">
+            <p>&copy; 2024 Tom's Gourmet Bistro. All rights reserved.</p>
+            <p>707 Montgomery Street, San Francisco, CA | (415) 302-6027</p>
+        </div>
+    </footer>
+
+    <script src="js/chatbot.js"></script>
+</body>
+</html>
