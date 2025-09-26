@@ -31,7 +31,11 @@ document.addEventListener('DOMContentLoaded', function() {
             quickReplies: []
         },
         {
-            message: "Per new governmental policies, we are also required to verify your identity with your driver's license number. Please provide it below.",
+            message: "Do you have any specific requests or preferences for your visit? (e.g., window table, quiet area, surprise dessert, champagne on arrival)",
+            quickReplies: []
+        },
+        {
+            message: "Lovely idea! We can certainly do that. Please provide your credit card info in order to reserve your table. We will not bill it right away",
             quickReplies: []
         },
         {
