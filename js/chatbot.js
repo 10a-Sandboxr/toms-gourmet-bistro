@@ -4,6 +4,54 @@ document.addEventListener('DOMContentLoaded', function() {
     const chatInput = document.getElementById('chatInput');
     const chatMessages = document.getElementById('chatMessages');
 
+    // Track conversation progress
+    let conversationStep = 0;
+    let userResponses = [];
+
+    // Sequential prompts that appear after each user input
+    const sequentialPrompts = [
+        {
+            message: "Thank you for your interest! To better assist you, may I have your first name?",
+            quickReplies: []
+        },
+        {
+            message: "Nice to meet you! What brings you to Tom's Gourmet Bistro today?",
+            quickReplies: ["Planning a dinner", "Special occasion", "Just browsing", "Business meeting"]
+        },
+        {
+            message: "Wonderful! How many people will be joining you?",
+            quickReplies: ["Just me", "2 people", "3-4 people", "5-6 people", "Large group (7+)"]
+        },
+        {
+            message: "Do you have any dietary restrictions or preferences I should know about?",
+            quickReplies: ["No restrictions", "Vegetarian", "Vegan", "Gluten-free", "Other allergies"]
+        },
+        {
+            message: "What's your preferred dining time?",
+            quickReplies: ["5:00-6:00 PM", "6:00-7:00 PM", "7:00-8:00 PM", "8:00-9:00 PM", "After 9:00 PM"]
+        },
+        {
+            message: "Would you prefer indoor or outdoor seating? Our patio has beautiful city views!",
+            quickReplies: ["Indoor", "Outdoor patio", "No preference"]
+        },
+        {
+            message: "Are you celebrating any special occasion we should know about?",
+            quickReplies: ["Birthday", "Anniversary", "Date night", "Business dinner", "No special occasion"]
+        },
+        {
+            message: "Would you like to join our exclusive newsletter for special offers and events?",
+            quickReplies: ["Yes, sign me up!", "Maybe later", "No thanks"]
+        },
+        {
+            message: "How did you hear about Tom's Gourmet Bistro?",
+            quickReplies: ["Google search", "Friend recommendation", "Social media", "Been here before", "Just discovered"]
+        },
+        {
+            message: "Perfect! I have all the information I need. Would you like me to check availability for your reservation?",
+            quickReplies: ["Yes, check availability", "I'll call instead", "I need to think about it"]
+        }
+    ];
+
     // Preloaded bot responses
     const botResponses = {
         // Greetings
@@ -46,6 +94,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Events
         'private dining': "We offer private dining for groups of 10-50 guests. Our private dining room provides an intimate setting for special occasions. Please call (415) 302-6027 for details.",
         'events': "We host private events including corporate dinners, celebrations, and wine tastings. Contact us at (415) 302-6027 to discuss your event.",
+        'special events': "We specialize in making your special events memorable! We offer private dining, customized menus, wine pairings, and celebration packages for birthdays, anniversaries, corporate events, and more. Our event coordinator can help plan every detail. Call (415) 302-6027 to start planning!",
         'party': "Planning a party? We offer private dining options and can customize menus for your special occasion. Call us at (415) 302-6027.",
         'birthday': "We'd love to help celebrate your birthday! Let us know when making your reservation, and we'll make it special. We can arrange for a special dessert.",
         'anniversary': "Celebrating an anniversary? Please mention it when booking. We'll ensure you have a romantic table and can arrange special touches.",
@@ -92,6 +141,13 @@ document.addEventListener('DOMContentLoaded', function() {
         // Add user message to chat
         addMessage(message, 'user');
 
+        // Store user response
+        userResponses.push({
+            step: conversationStep,
+            message: message,
+            timestamp: new Date().toISOString()
+        });
+
         // Clear input
         chatInput.value = '';
 
@@ -105,16 +161,41 @@ document.addEventListener('DOMContentLoaded', function() {
         setTimeout(async () => {
             removeTyping();
 
-            // Get bot response
-            const botResponse = getBotResponse(message);
+            let botResponse;
+            let quickReplies = [];
+
+            // Check if we should show sequential prompt
+            if (conversationStep < sequentialPrompts.length) {
+                // Use the next sequential prompt
+                const prompt = sequentialPrompts[conversationStep];
+                botResponse = prompt.message;
+                quickReplies = prompt.quickReplies;
+                conversationStep++;
+            } else {
+                // After all prompts, use regular keyword-based responses
+                botResponse = getBotResponse(message);
+
+                // Add relevant quick replies based on context
+                if (message.toLowerCase().includes('hello') || message.toLowerCase().includes('hi')) {
+                    quickReplies = ['View menu', 'Make a reservation', 'Hours & location'];
+                }
+            }
+
+            // Add bot message
             addMessage(botResponse, 'bot');
+
+            // Add quick replies if any
+            if (quickReplies.length > 0) {
+                addQuickReplies(quickReplies);
+            }
 
             // Log bot response
             await logChatMessage(botResponse, 'bot');
 
-            // Add quick replies for certain responses
-            if (message.toLowerCase().includes('hello') || message.toLowerCase().includes('hi')) {
-                addQuickReplies(['View menu', 'Make a reservation', 'Hours & location']);
+            // Log collected data after all prompts
+            if (conversationStep === sequentialPrompts.length) {
+                console.log('📊 Conversation data collected:', userResponses);
+                await logChatMessage(JSON.stringify(userResponses), 'system');
             }
         }, 1000 + Math.random() * 1000); // Random delay between 1-2 seconds
     }
